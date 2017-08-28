@@ -10,6 +10,7 @@ require.config({
     text: 'libs/require/text',
     datatables: 'libs/datatables/jquery.dataTables.min',
     datatablest: 'libs/datatables/dataTables.TorStatus',
+    datatablessort: 'libs/datatables/dataTables.Sorting',
     tooltip: 'libs/bootstrap/bootstrap-tooltip',
     typeahead: 'libs/bootstrap/bootstrap-typeahead',
     collapse: 'libs/bootstrap/bootstrap-collapse',

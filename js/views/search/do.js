@@ -6,6 +6,7 @@ define([
   'collections/results',
   'text!templates/search/do.html',
   'datatables',
+  'datatablessort',
   'tooltip',
   'helpers',
   'collapse',
@@ -115,12 +116,27 @@ define([
             document.title = "Atlas";
             this.filtering();
             var asInitVals = new Array();
-		var compiledTemplate = _.template(doSearchTemplate, {relays: this.relays, countries: CountryCodes, error: this.error});
+            var compiledTemplate = _.template(doSearchTemplate, {relays: this.relays, countries: CountryCodes, error: this.error});
 			this.el.html(compiledTemplate);
-			var fp = this;
-			// This creates the table using DataTables
+            var fp = this;
+            loadSortingExtensions();
+            // This creates the table using DataTables
 			var oTable = $('#torstatus_results').dataTable({
-				// Save the state of the tables
+                //Define column specific options
+                "aoColumns": [
+                        null,   //Status
+                        null,   //Nickname
+                        { "sType":  "file-size" },  //Bandwidth
+                        null,   //Uptime
+                        null,   //Country
+                        { "sType":  "ip-address" },  //IP Address
+                        null,   //Flags
+                        null,   //Properties
+                        null,   //ORPort
+                        null,   //DirPort
+                        null    //Type
+                    ],
+                // Save the state of the tables
                 "sDom": "<'row'<'span6'l><'span6 hide'f>r>t<'row'<'span6'i><'span6'p>>",
 				"bStateSave": false,
 				"aaSorting": [],
