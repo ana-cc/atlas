@@ -120,6 +120,9 @@
     <%=propertyCount==0?'none':''%>
     </dd>
 
+    <dt><span class="tip" title="The DNS name for the relay as found by performing a reverse lookup on its first IP address.">DNS Name</span></dt>
+    <dd><% if (relay.get('host_name')) { %><%= relay.get('host_name') %><% } else { %>No PTR record found<% } %></dd>
+
     <dt><span class="tip" title="Country as found in a GeoIP database by resolving the relay's first onion-routing address.">Country</span></dt>
     <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="img/cc/<%= relay.get('country') %>.png"/> <%= relay.get('countryname') %><% } else { %>Unknown<% } %></dd>
 
