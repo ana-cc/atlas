@@ -32,11 +32,9 @@ define([
                 if (flag == "Named") {
                     output.push([flag,"info_"+size[2], "This relay's identity-nickname mapping is canonical, and this authority binds names."]);
                 }
-                /* added for future use, but we need an icon...
                 if (flag == "NoEdConsensus") {
-                    output.push([flag,"xxx_"+size[2], "An Ed25519 key in the relay's descriptor or microdesriptor does not reflect authority consensus."]);
+                    output.push([flag,"question_mark_"+size[2], "An Ed25519 key in the relay's descriptor or microdesriptor does not reflect authority consensus."]);
                 }
-                */
                 if (flag == "Running") {
                     output.push([flag,"fork_"+size[1], "This relay is currently usable."]);
                 }
