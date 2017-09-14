@@ -169,6 +169,7 @@ define([
                     relay.dir_port = relay.dir_address ? relay.dir_address.split(":")[1] : 0;
                     relay.country = relay.country ? relay.country.toLowerCase() : null;
                     relay.countryname = relay.country ? CountryCodes[relay.country] : null;
+                    relay.first_seen = relay.first_seen ? relay.first_seen : null;
                     relay.uptime = relay.last_restarted ? model.parsedate(relay.last_restarted) : null;
                     relay.uptime_hr = relay.last_restarted ? relay.uptime.hr : null;
                     relay.uptime_hrfull = relay.last_restarted ? relay.uptime.hrfull : null;

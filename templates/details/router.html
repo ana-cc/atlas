@@ -114,6 +114,9 @@
     <dt><span class="tip" title="Autonomous System Name">AS Name</span></dt>
     <dd><%= relay.get('as_name') ? _.escape(relay.get('as_name')) : "unknown" %></dd>
 
+    <dt><span class="tip" title="The first time that this relay was seen online.">First Seen</span></dt>
+    <dd><%= relay.get('first_seen') %></dd>
+
     <dt><span class="tip" title="Date and time when the relay was last (re-)started.">Last Restarted</span></dt>
     <dd><%= relay.get('last_restarted') %></dd>
 

@@ -73,6 +73,9 @@
     <%=propertyCount==0?'none':''%>
     </dd>
 
+    <dt><span class="tip" title="The first time that this relay was seen online.">First Seen</span></dt>
+    <dd><%= relay.get('first_seen') %></dd>
+
     <dt><span class="tip" title="Date and time when the bridge was last (re-)started.">Last Restarted</span></dt>
     <dd><%= relay.get('last_restarted') %></dd>
 
