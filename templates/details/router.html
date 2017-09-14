@@ -59,6 +59,21 @@
       </dd>
     </dl>
 
+    <dt><span class="tip" title="Relays that are part of this relay's family and consider this relay to be part of their family.">Effective Family Members</span></dt>
+    <dd>
+        <pre class="pre-scrollable"><% if (relay.get('effective_family') !== null) { %><% _.each(relay.get('effective_family'), function(member) { %><% var valid = member.match(RegExp("^\$[A-F0-9]{40}$")); %>
+<% if (valid) { %><a href="#details/<%= member.replace('$', '') %>"><% } %><%= member %><% if (valid) { %></a><% }}); %>
+<% } else { %>none<% } %></pre>
+    </dd>
+    <dt><span class="tip" title="Relays that are part of this relay's family but don't consider this relay to be part of their family.">Alleged Family Members</span></dt>
+    <dd>
+        <pre class="pre-scrollable"><% if (relay.get('alleged_family') !== null) { %><% _.each(relay.get('alleged_family'), function(member) { %><% var valid = member.match(RegExp("^\$[A-F0-9]{40}$")); %>
+<% if (valid) { %><a href="#details/<%= member.replace('$', '') %>" class="alleged"><% } %><%= member %><% if (valid) { %></a><% }}); %>
+<% } else { %>none<% } %></pre>
+    </dd>
+
+    <dt><span class="tip" title="What OS and Tor version the relay is using">Platform</span></dt>
+    <dd><%= _.escape(relay.get('platform')) %></dd>
 
     </div>
     <div class="span6">
@@ -120,21 +135,6 @@
     <dt><span class="tip" title="Date and time when the relay was last (re-)started.">Last Restarted</span></dt>
     <dd><%= relay.get('last_restarted') %></dd>
 
-    <dt><span class="tip" title="Relays that are part of this relay's family and consider this relay to be part of their family.">Effective Family Members</span></dt>
-    <dd>
-        <pre><% if (relay.get('effective_family') !== null) { %><% _.each(relay.get('effective_family'), function(member) { %><% var valid = member.match(RegExp("^\$[A-F0-9]{40}$")); %>
-<% if (valid) { %><a href="#details/<%= member.replace('$', '') %>"><% } %><%= member %><% if (valid) { %></a><% }}); %>
-<% } else { %>none<% } %></pre>
-    </dd>
-    <dt><span class="tip" title="Relays that are part of this relay's family but don't consider this relay to be part of their family.">Alleged Family Members</span></dt>
-    <dd>
-        <pre><% if (relay.get('alleged_family') !== null) { %><% _.each(relay.get('alleged_family'), function(member) { %><% var valid = member.match(RegExp("^\$[A-F0-9]{40}$")); %>
-<% if (valid) { %><a href="#details/<%= member.replace('$', '') %>" class="alleged"><% } %><%= member %><% if (valid) { %></a><% }}); %>
-<% } else { %>none<% } %></pre>
-    </dd>
-
-    <dt><span class="tip" title="What OS and Tor version the relay is using">Platform</span></dt>
-    <dd><%= _.escape(relay.get('platform')) %></dd>
 
     <dt><span class="tip" title="Weight assigned to this relay by the directory authorities that clients use in their path selection algorithm. The unit is arbitrary; currently it's kilobytes per second, but that might change in the future.">Consensus Weight</span></dt>
     <dd><%= relay.get('consensus_weight') %></dd>
