@@ -72,8 +72,6 @@
 <% } else { %>none<% } %></pre>
     </dd>
 
-    <dt><span class="tip" title="What OS and Tor version the relay is using">Platform</span></dt>
-    <dd><%= _.escape(relay.get('platform')) %></dd>
 
     </div>
     <div class="span6">
@@ -141,6 +139,9 @@
 
     <dt><span class="tip" title="Weight assigned to this relay by the directory authorities that clients use in their path selection algorithm. The unit is arbitrary; currently it's kilobytes per second, but that might change in the future.">Consensus Weight</span></dt>
     <dd><%= relay.get('consensus_weight') %></dd>
+
+    <dt><span class="tip" title="What OS and Tor version the relay is using">Platform</span></dt>
+    <dd><%= _.escape(relay.get('platform')) %></dd>
 
     </dl>
     </div>
