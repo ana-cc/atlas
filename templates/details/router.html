@@ -10,7 +10,9 @@
 <div class="page-header">
 <h2>General <small>Overall information on the Tor relay</small></h2>
 </div>
-
+<% if (relay.get('recommended_version') === false) { %>
+<div class="alert alert-danger">This relay is running an outdated Tor version and should be updated to a recent release of Tor that may contain important fixes.</div>
+<% } %>
 <div class="row">
     <div class="span6">
     <h3>Configuration</h3>
