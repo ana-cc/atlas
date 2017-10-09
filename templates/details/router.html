@@ -10,6 +10,9 @@
 <div class="page-header">
 <h2>General <small>Overall information on the Tor relay</small></h2>
 </div>
+<% if (relay.get('new_relay') === true) {%>
+<div class="alert alert-info">This relay appears to be less than 2 weeks old. <a href="https://blog.torproject.org/lifecycle-new-relay">This blog post</a> explains the lifecycle of a new relay, and why it will not be immediately fully used to capacity.</div>
+<% } %>
 <% if (relay.get('recommended_version') === false) { %>
 <div class="alert alert-danger">This relay is running an outdated Tor version and should be updated to a recent release of Tor that may contain important fixes.</div>
 <% } %>
@@ -133,7 +136,7 @@
     <dd><%= relay.get('as_name') ? _.escape(relay.get('as_name')) : "unknown" %></dd>
 
     <dt><span class="tip" title="The first time that this relay was seen online.">First Seen</span></dt>
-    <dd><%= relay.get('first_seen') %></dd>
+    <dd><%= relay.get('first_seen') %> (<%= relay.get('age') %>)</dd>
 
     <dt><span class="tip" title="Date and time when the relay was last (re-)started.">Last Restarted</span></dt>
     <dd><%= relay.get('last_restarted') %></dd>
