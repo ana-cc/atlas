@@ -4,7 +4,6 @@ define([
   'underscore',
   'backbone',
   'text!templates/search/main.html',
-  'collapse'
 ], function($, _, Backbone, mainSearchTemplate){
   var mainSearchView = Backbone.View.extend({
 	    el: $("#content"),
@@ -14,16 +13,20 @@ define([
 			var data = {};
 			var compiledTemplate = _.template(mainSearchTemplate, data);
 			this.el.html(compiledTemplate);
-            $("#do_search").bind('click', function(){
+
+            $("#do-top10").bind('click', function(){
+                document.location = "#top10";
+                return false;
+            });
+
+            $("#do-search").bind('click', function(){
                 var query = _.escape($('#query').val());
-                $("#suggestion").hide();
                 document.location = "#search/"+query;
                 return false;
             });
 
             $("#home-search").bind('submit', function(){
                 var query = _.escape($('#query').val());
-                $("#suggestion").hide();
                 document.location = "#search/"+query;
                 return false;
             });

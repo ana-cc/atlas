@@ -1,9 +1,27 @@
-     <div class="container">
-        <div class="hero-unit">
-            <h1>Welcome to Atlas.</h1>
-            <p>Atlas is a web application to learn about currently running Tor relays. Enter your search in the above box to get started.</p>
-            <p><a class="btn btn-primary btn-large" href="#about">Learn more</a></p>
-        </div>
+  <p>The relay search tool is a web application to discover Tor relays. It
+provides useful information on how relays are configured along with graphics
+about their past.</p>
+  <form id="home-search">
+    <div class="input-group">
+      <input class="search-query form-control" id="query" placeholder="Query" type="text">
+      <span class="input-group-btn"><button id="do-search" class="btn btn-primary" type="button">Search</button><button class="btn btn-secondary" type="button" id="do-top10">Top 10</button></span>
     </div>
-
-
+  </form>
+  <div class="well">
+  <p>You can search for Tor relays and bridges by using keywords. In
+particular, Atlas enables you to search for (partial) nicknames (e.g.,
+“moria”), IP addresses (e.g., “<a href="#search/128.31.">128.31.</a>”), and
+fingerprints (e.g., “<a href="#search/9695DFC3">9695DFC3</a>”).  It is also
+possible to combine searches, e.g., “<a href="#search/moria%20128.31.">moria
+128.31.</a>”. Finally, you can use qualifiers to search for relays in specific
+countries (e.g., “<a href="#search/moria%20country:us">moria country:us</a>”),
+with specific contact information (e.g., “<a
+href="#search/contact:arma">contact:arma</a>”), or with specific flags (e.g.,
+“<a href="#search/flag:Authority">flag:Authority</a>”).</p>
+  <p>If you are searching for a bridge, you will need to search by the hashed
+fingerprint. This prevents leaking the fingerprint of the bridge when
+searching. You can find this in the <code>hashed-fingerprint</code> file in the
+Tor data directory. On Debian systems, this is in <code>/var/lib/tor</code> but
+may be in another location on your system. The location is specified as
+<code>DataDirectory</code> in your <code>torrc</code>.</p>
+  </div>

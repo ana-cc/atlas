@@ -5,7 +5,6 @@ define([
   'underscore',
   'backbone',
   'text!templates/about.html',
-  'collapse',
   'tooltip'
 ], function($, _, Backbone, aboutTemplate){
     var aboutView = Backbone.View.extend({

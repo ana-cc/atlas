@@ -9,7 +9,6 @@ define([
   'datatablessort',
   'tooltip',
   'helpers',
-  'collapse',
   'typeahead'
 ], function($, _, Backbone, resultsCollection, doSearchTemplate){
   var doSearchView = Backbone.View.extend({
@@ -116,12 +115,12 @@ define([
             document.title = "Atlas";
             this.filtering();
             var asInitVals = new Array();
-            var compiledTemplate = _.template(doSearchTemplate, {relays: this.relays, countries: CountryCodes, error: this.error});
+            var compiledTemplate = _.template(doSearchTemplate, {query: query, relays: this.relays, countries: CountryCodes, error: this.error});
 			this.el.html(compiledTemplate);
             var fp = this;
             loadSortingExtensions();
             // This creates the table using DataTables
-			var oTable = $('#torstatus_results').dataTable({
+            var oTable = $('#torstatus_results').dataTable({
                 //Define column specific options
                 "aoColumns": [
                         null,   //Status
@@ -155,7 +154,6 @@ define([
             $('input#type').typeahead({
                     source: ['Relay', 'Bridge']
             });
-            $(".search-query").val(query);
 
             $("#torstatus_results tbody tr").hover(function() {
                 $(this).addClass('hover');

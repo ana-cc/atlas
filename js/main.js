@@ -4,7 +4,7 @@
 // Configure require.js shortcut aliases
 require.config({
   paths: {
-    jquery: 'libs/jquery/jquery-min',
+    jquery: 'https://metrics.torproject.org/js/jquery-3.2.1.min',
     underscore: 'libs/underscore/underscore-min',
     backbone: 'libs/backbone/backbone-optamd3-min',
     text: 'libs/require/text',
@@ -12,8 +12,7 @@ require.config({
     datatablest: 'libs/datatables/dataTables.TorStatus',
     datatablessort: 'libs/datatables/dataTables.Sorting',
     tooltip: 'libs/bootstrap/bootstrap-tooltip',
-    typeahead: 'libs/bootstrap/bootstrap-typeahead',
-    collapse: 'libs/bootstrap/bootstrap-collapse',
+    typeahead: 'libs/bootstrap/bootstrap3-typeahead.min',
     d3js: 'libs/d3js/d3.v3.min',
     jssha: 'libs/jssha/sha1',
     templates: '../templates'

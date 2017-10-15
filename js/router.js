@@ -6,16 +6,14 @@ define([
   'views/details/main',
   'views/search/main',
   'views/search/do',
-  'views/about/main',
   'jssha'
-], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aboutView, jsSHA){
+], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, jsSHA){
   var AppRouter = Backbone.Router.extend({
     routes: {
        // Define the routes for the actions in Atlas
     	'details/:fingerprint': 'mainDetails',
     	'search/:query': 'doSearch',
 	'top10': 'showTop10',
-    	'about': 'showAbout',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -30,8 +28,6 @@ define([
     // Show the details page of a node
     mainDetails: function(fingerprint){
 
-        $("#home").removeClass("active");
-        $("#about").removeClass("active");
 
         $("#content").hide();
         $(".progress").show();
@@ -42,25 +38,25 @@ define([
     	        mainDetailsView.render();
                 $(".progress").hide();
                 $("#content").show();
+                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Details for " + relay.get('nickname') + "</li>");
 
             },
             error: function() {
                 mainDetailsView.error();
                 $(".progress").hide();
                 $("#content").show();
+                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
             }
         });
     },
 
     // Perform a search on Atlas
     doSearch: function(query){
-        $("#home").removeClass("active");
-        $("#about").removeClass("active");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
 
         $("#content").hide();
         $(".progress").show();
 
-        $("#nav-search").val(query);
         if (query == "") {
 	    doSearchView.error = 5;
             doSearchView.renderError();
@@ -97,8 +93,7 @@ define([
         }
     },
     showTop10: function(){
-        $("#home").removeClass("active");
-        $("#about").removeClass("active");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top 10 Relays</li>");
 
         $("#content").hide();
         $(".progress").show();
@@ -122,21 +117,10 @@ define([
                 }
             });
     },
-    // Display the Atlas about page
-    showAbout: function(){
-        $("#home").removeClass("active");
-        $("#about").addClass("active");
-
-    	aboutView.render();
-
-        $(".progress").hide();
-        $("#content").show();
-    },
 
     // No matched rules go to the default home page
     defaultAction: function(actions){
-        $("#home").addClass("active");
-        $("#about").removeClass("active");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li class=\"active\">Relay Search</li>");
 
         mainSearchView.render();
 
@@ -149,17 +133,6 @@ define([
   var initialize = function(){
     var app_router = new AppRouter;
     Backbone.history.start();
-
-    // This is probably a dirty trick and there should be a better
-    // way of doing so.
-
-    $("#nav-search").submit(function(e){
-        var query = _.escape($(this).children("input.search-query").val());
-        query = query.trim();
-        $("#suggestion").hide();
-        document.location = "#search/"+query;
-        return false;
-    });
   };
   return {
     initialize: initialize

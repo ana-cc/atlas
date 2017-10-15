@@ -58,7 +58,7 @@ define([
                         }
                     });
                 });
-            }).error(
+            }).fail(
                 function(jqXHR, textStatus, errorThrown) {
                 if(jqXHR.statusText == "error") {
                     error(2);

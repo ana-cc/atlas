@@ -1,16 +1,11 @@
-<div class="page-header">
-<h1>Atlas</h1>
-</div>
 <p class="lead">
 Atlas is a web application to discover Tor relays. It provides useful information on how relays are configured along with graphics about their past.
 </p>
 
-<div class="page-header">
-<h1>Features</h1>
-</div>
+<h2>Features</h1>
 <div class="row">
-<div class="span4">
-<h2>Search and Filter</h2>
+<div class="col-md-4">
+<h3>Search and Filter</h2>
 <p>
 You can search for Tor relays and bridges by using keywords.  In particular,
 Atlas enables you to search for (partial) nicknames (e.g.,
@@ -24,12 +19,12 @@ country:us&rdquo;), with specific contact information (e.g.,
 </p>
 </div>
 
-<div class="span4">
-<h2>Discover</h2>
+<div class="col-md-4">
+<h3>Discover</h2>
 <p>
 You are able to get a detailed view of how the relay is configured. What its exit policy is and all the data that you would normally find in the descriptor.
 </p>
-<h2>Bridges</h2>
+<h3>Bridges</h2>
 If you are searching for a bridge, you will need to search by the hashed
 fingerprint. This prevents leaking the fingerprint of the bridge when
 searching. You can find this in the <code>hashed-fingerprint</code> file in the
@@ -38,20 +33,18 @@ but may be in another location on your system. The location is specified as
 <code>DataDirectory</code> in your <code>torrc</code>.
 </div>
 
-<div class="span4">
-<h2>Graphs</h2>
+<div class="col-md-4">
+<h3>Graphs</h2>
 <p>
 The historical data of a relay's bandwidth usage is available in graph form.
 </p>
 </div>
 </div>
 
-<div class="page-header">
-<h1>Technologies</h1>
-</div>
+<h2>Technologies</h1>
 <div class="row">
-<div class="span4">
-<h2>Pure Client Side</h2>
+<div class="col-md-4">
+<h3>Pure Client Side</h2>
 <p>
 This application is built in a way that all the logic is delegated to
 the client.  This means that the amount of requests made to the server
@@ -62,8 +55,8 @@ retrieving relay data is called <a href="https://onionoo.torproject.org/">Oniono
 </p>
 </div>
 
-<div class="span4">
-<h2>Libraries</h2>
+<div class="col-md-4">
+<h3>Libraries</h2>
 <p>
 Atlas uses <a href="http://backbonejs.org/">Backbone.js</a> as an MV* framework, with <a href="http://requirejs.org/">require.js</a> for AMD loading of
 dependencies. <a href="https://jquery.com/">jQuery</a> and <a href="http://underscorejs.org/">Underscore.js</a> as JS utility libraries.
@@ -72,8 +65,8 @@ dependencies. <a href="https://jquery.com/">jQuery</a> and <a href="http://under
 </p>
 </div>
 
-<div class="span4">
-<h2>Open Source</h2>
+<div class="col-md-4">
+<h3>Open Source</h2>
 <p>
 All the code for this website is Open Source and released under 2-Clause BSD.
 The source code can be found at <a href="https://gitweb.torproject.org/atlas.git">https://gitweb.torproject.org/atlas.git</a>.

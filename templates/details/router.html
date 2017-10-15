@@ -1,15 +1,12 @@
-<h1>
+<h2>
     Details for: <%= relay.get('nickname') %>
     <% if (relay.get('running') === false) { %>
     <span class="tip circle circle-offline" title="This relay is offline."></span>
     <% } else { %>
     <span class="tip circle circle-online" title="This relay is running."></span>
     <% } %>
-</h1>
+</h2>
 
-<div class="page-header">
-<h2>General <small>Overall information on the Tor relay</small></h2>
-</div>
 <% if (relay.get('new_relay') === true) {%>
 <div class="alert alert-info">This relay appears to be less than 2 weeks old. <a href="https://blog.torproject.org/lifecycle-new-relay">This blog post</a> explains the lifecycle of a new relay, and why it will not be immediately fully used to capacity.</div>
 <% } %>
@@ -17,7 +14,7 @@
 <div class="alert alert-danger">This relay is running an outdated Tor version and should be updated to a recent release of Tor that may contain important fixes.</div>
 <% } %>
 <div class="row">
-    <div class="span6">
+    <div class="col-md-6">
     <h3>Configuration</h3>
     <dl>
       <dt><span class="tip" title="This is the nickname that the Tor relay operator chose.">Nickname</span></dt>
@@ -79,7 +76,7 @@
 
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
     <% if (relay.get('running') === true) { %>
     <h3>Properties</h3>
     <% } else { %>
@@ -152,14 +149,19 @@
     </div>
 </div>
 
-<div class="page-header">
-<h2>Graphs <small>Pretty graphs</small></h2>
-</div>
+<h3>History</h3>
 
-<div class="row">
-    <div class="span12">
-    <ul class="thumbnails">
-        <li>
+<ul class="nav nav-tabs">
+  <li id="history-1m-tab" class="history-tabs active"><a onclick="$('.history').hide();$('#history-1m').fadeIn();$('.history-tabs').removeClass('active');$('#history-1m-tab').addClass('active');">1 Month</a></li>
+  <li id="history-3m-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-3m').fadeIn();$('.history-tabs').removeClass('active');$('#history-3m-tab').addClass('active');">3 Months</a></li>
+  <li id="history-1y-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-1y').fadeIn();$('.history-tabs').removeClass('active');$('#history-1y-tab').addClass('active');">1 Year</a></li>
+  <li id="history-5y-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-5y').fadeIn();$('.history-tabs').removeClass('active');$('#history-5y-tab').addClass('active');">5 Years</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="history-1m" class="history tab-pane active">
+    <div class="row">
+        <div class="col-md-6">
           <div class="thumbnail">
             <div id="bw_month" class="graph">
             <img src="img/no-data-available.png" alt="">
@@ -169,10 +171,24 @@
               <a id="save_bw_month" href="">Save Graph</a>
             </div>
           </div>
-          </li>
-        <li>
+        </div>
+        <div class="col-md-6">
           <div class="thumbnail">
-
+            <div id="weights_month" class="graph">
+            <img src="img/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>1 Month graph</h5>
+              <a id="save_weights_month" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="history-3m" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
             <div id="bw_months" class="graph">
             <img src="img/no-data-available.png" alt="">
             </div>
@@ -181,8 +197,23 @@
               <a id="save_bw_months" href="">Save Graph</a>
             </div>
           </div>
-        </li>
-        <li>
+        </div>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="weights_months" class="graph">
+            <img src="img/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>3 Months graph</h5>
+              <a id="save_weights_months" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div id="history-1y" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
           <div class="thumbnail">
             <div id="bw_year" class="graph">
             <img src="img/no-data-available.png" alt="">
@@ -192,86 +223,46 @@
               <a id="save_bw_year" href="">Save Graph</a>
             </div>
           </div>
-          </li>
-        <li>
-          <div class="thumbnail">
-            <div id="bw_years" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>5 Years graph</h5>
-              <a id="save_bw_years" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-</div>
-
-<div class="row">
-    <div class="span12">
-        <ul class="thumbnails">
-        <li>
-          <div class="thumbnail">
-            <div id="weights_week" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>1 Week graph</h5>
-              <a id="save_weights_week" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="thumbnail">
-            <div id="weights_month" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>1 Month graph</h5>
-              <a id="save_weights_month" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="thumbnail">
-            <div id="weights_months" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>3 Months graph</h5>
-              <a id="save_weights_months" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-        <li>
+        </div>
+        <div class="col-md-6">
           <div class="thumbnail">
             <div id="weights_year" class="graph">
             <img src="img/no-data-available.png" alt="">
             </div>
-
            <div class="caption">
               <h5>1 Year graph</h5>
               <a id="save_weights_year" href="">Save Graph</a>
             </div>
           </div>
-        </li>
-        <li>
+        </div>
+    </div>
+  </div>
+  <div id="history-5y" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="bw_years" class="graph">
+            <img src="img/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>5 Years graph</h5>
+              <a id="save_bw_years" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
           <div class="thumbnail">
             <div id="weights_years" class="graph">
             <img src="img/no-data-available.png" alt="">
             </div>
-
            <div class="caption">
               <h5>5 Years graph</h5>
               <a id="save_weights_years" href="">Save Graph</a>
             </div>
           </div>
-        </li>
-      </ul>
+        </div>
+    </div>
+  </div>
 </div>
-</div>
+
+</div><!-- container-fluid -->

@@ -11,7 +11,6 @@ define([
   'text!templates/details/error.html',
   'tooltip',
   'd3js',
-  'collapse',
   'helpers'
 ], function($, _, Backbone, relayModel, graphModel,
         routerDetailsTemplate, bridgeDetailsTemplate, errorDetailsTemplate){
@@ -202,7 +201,7 @@ define([
                 this.graph.lookup_weights(this.model.fingerprint, {
                     success: function() {
                         graph.parse_weights_data(graph.data);
-                        graphs = ['weights_week', 'weights_month',
+                        graphs = ['weights_month',
                                 'weights_months', 'weights_year', 'weights_years'];
                         _.each(graphs, function(g) {
                             var data = [graph.get(g).cw, graph.get(g).middle,
@@ -222,7 +221,7 @@ define([
                 this.graph.lookup_clients(this.model.fingerprint, {
                     success: function() {
                         graph.parse_clients_data(graph.data);
-                        graphs = ['clients_week', 'clients_month',
+                        graphs = ['clients_month',
                                 'clients_months', 'clients_year', 'clients_years'];
                         _.each(graphs, function(g) {
                             var data = [graph.get(g).average];

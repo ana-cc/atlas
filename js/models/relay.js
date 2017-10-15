@@ -207,7 +207,7 @@ define([
                 } else {
                     error(model)
                 }
-            }).error(function() {
+            }).fail(function() {
                 error();
             });
         }

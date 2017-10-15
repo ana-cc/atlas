@@ -1,16 +1,13 @@
+
+<h2 id="search-title"></h2>
+
 <div class="results_box">
 <% if(!relays) { %>
     <% if(error == 0) { %>
-    <div class="alert">
+    <div class="alert alert-info">
         <strong>No Results found!</strong><p>
     No Tor relays matched your query :(</p>
-    </div>
-    <% } else if (error == 1) { %>
-    <div class="alert alert-error">
-        <strong>Too many matches!</strong><p>The current version of Atlas does
-    not support a result set greater than 40. This is due to some performance
-    issues in doing multiple parallel connections in javascript. Future versions
-    will hopefully manage to overcome this issue.</p>
+    <p><a href="#">Return to home page</a></p>
     </div>
     <% } else if (error == 2) { %>
     <div class="alert alert-error">
@@ -40,19 +37,21 @@
     <% } %>
 <% } else { %>
     <% if (error == 4) { %>
-    <div class="alert alert-error">
+    <div class="alert alert-warning">
         <strong>Too many matches!</strong><p>The current version of
         Atlas does not support a result set greater than 50 and only displays
         the first 50 hits. This is due to some performance issues in doing
         multiple parallel connections in JavaScript. Future versions will
         hopefully manage to overcome this issue.</p>
+	<% if ( ! query.includes("running:true") ) { %><p>You may find it
+        useful to <a href="#search/running:true <%= query %>">add
+        <code>running:true</code> to your query</a> to only return relays that are
+        currently running.</p><% } %>
     </div>
     <% } %>
 
-<div class="page-header">
-<h1 id="search-title"></h1>
-</div>
-<table class="table table-bordered table-striped" id="torstatus_results">
+
+<table class="table table-hover table-striped" id="torstatus_results">
 	<thead>
 		<tr>
 			<th></th>
@@ -69,14 +68,9 @@
 		</tr>
 	</thead>
 	<tbody>
-<% var i = 0; %>
 
 <% _.each(relays, function(relay) { %>
-		<% if (i % 2 == 0 ) { %>
-			<tr class="even">
-		<% } else { %>
-			<tr class="odd">
-		<% } %>
+            <tr<% if (relay.get('running') === false) { %> class="danger"<% } %>>
             <td>
             <% if (relay.get('running') === false) { %>
                 <span class="tip circle circle-offline" title="This relay is offline."></span>
@@ -101,10 +95,8 @@
             <% } %>
             </td>
 			<td><%= relay.get('or_address') %></td>
-			<td>
-            <% _.each(relay.get('flags'), function(flag) { %>
-            <img class="tip inline flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/>
-            <% }); %>
+			<td class="flags-cell">
+            <% _.each(relay.get('flags'), function(flag) { %><img class="tip flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>
             <td>
             <% if (relay.get('recommended_version') === false) { %>
@@ -125,7 +117,6 @@
 				<% } %>
 			</td>
             </tr>
-	<% i += 1; %>
 <% }); %>
 	</tbody>
 	<tfoot>
@@ -154,6 +145,7 @@
             <input type="text" id="flags" name="flags" placeholder="Flags" class="search_init">
         </th>
         <th>
+            <input type="text" id="flags" name="properties" placeholder="Properties" class="search_init">
         </th>
 		<th>
             <input type="text" id="or_port" name="or_port" placeholder="ORPort" class="search_init span1">
@@ -169,3 +161,4 @@
 </table>
 <% } %>
 </div>
+

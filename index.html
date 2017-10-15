@@ -1,80 +1,198 @@
+<!DOCTYPE HTML>
+<html lang="en" style="min-height:100%;">
+<head>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Atlas</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relay Search - Tor Metrics</title>
 
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/datatable.css">
+  <meta charset="utf-8">
+  <link href="https://metrics.torproject.org/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 
-    <style type="text/css">
-        body {
-            padding-bottom: 40px;
-        }
-    </style>
-    <link rel="shortcut icon" href="img/favicon.ico">
-  </head>
+  <!-- yes, we are handheld friendly :) -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <body>
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#"><img src="img/atlas.png" alt="Home" /></a>
-          <form id="nav-search" class="navbar-search pull-right">
-              <input type="text" class="search-query" placeholder="Search">
-          </form>
-          <div class="nav-collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#top10">Top 10 Relays</a></li>
-            </ul>
-          </div>
-        </div>
+  <!-- icons for mobile devices -->
+  <link rel="apple-touch-icon" href="https://metrics.torproject.org/images/apple-touch-icon-152x152.png">
+  <link rel="shortcut icon" href="https://metrics.torproject.org/images/android-icon.png" sizes="196x196">
+  <meta name="msapplication-square70x70logo" content="https://metrics.torproject.org/images/smalltile.png">
+  <meta name="msapplication-square150x150logo" content="https://metrics.torproject.org/images/mediumtile.png">
+  <meta name="msapplication-wide310x150logo" content="https://metrics.torproject.org/images/widetile.png">
+  <meta name="msapplication-square310x310logo" content="https://metrics.torproject.org/images/largetile.png">
+
+  <!-- jQuery -->
+  <script src="js/jquery-3.2.1.min.js"></script>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="https://metrics.torproject.org/js/bootstrap.min.js"></script>
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="fonts/source-sans-pro.css">
+
+  <!-- Prism -->
+  <link rel="stylesheet" href="css/prism.css">
+  <script src="https://metrics.torproject.org/js/prism.js"></script>
+
+  <!-- custom styles and javascript -->
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://metrics.torproject.org/js/script.js"></script>
+
+  <!-- Atlas CSS -->
+  <link rel="stylesheet" href="css/atlas.css">
+
+</head>
+
+<body class="noscript" style="background-image:url(images/ajax-loader.gif);background-repeat:no-repeat;background-position:center center;">
+
+<!-- Using evil inline stylesheets to hide the FOUC for slow connections... -->
+
+<div id="wrapper" style="display:none;">
+
+<!-- backToTop-Button and Anchor -->
+<noscript>
+<div class="topButton" style="display:block;"><a href="#top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a></div>
+</noscript>
+<script type="text/javascript">
+document.write('<div class="topButton" style="display:none;"><a href="#top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a></div>');
+</script>
+<a id="top"></a>
+
+<!-- secondary navigation -->
+<nav class="navbar navbar-default navbar-secondary">
+  <div class="container-fluid">
+    <input type="checkbox" id="navbar-toggle-checkbox">
+    <div class="navbar-header">
+      <label for="navbar-toggle-checkbox" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-secondary" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </label>
+      <a class="navbar-brand visible-xs" href="https://metrics.torproject.org/"><img src="images/tor-metrics-white.png" width="232" height="50" alt="Tor Metrics"></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-secondary">
+      <ul class="nav navbar-nav navbar-right">
+
+        <!-- we have to copy the primary navigation items here for mobile accessibility -->
+        <li class="visible-xs section-header">Metrics</li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/userstats-relay-country.html"><i class="fa fa-users fa-fw hidden-sm" aria-hidden="true"></i> Users</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/networksize.html"><i class="fa fa-server fa-fw hidden-sm" aria-hidden="true"></i> Servers</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/bandwidth.html"><i class="fa fa-road fa-fw hidden-sm" aria-hidden="true"></i> Traffic</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/torperf.html"><i class="fa fa-dashboard fa-fw hidden-sm" aria-hidden="true"></i> Performance</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/hidserv-dir-onions-seen.html"><i class="fa fa-map-signs fa-fw hidden-sm" aria-hidden="true"></i> Onion Services</a></li>
+        <li class="visible-xs"><a href="https://metrics.torproject.org/webstats-tb.html"><i class="fa fa-download fa-fw hidden-sm" aria-hidden="true"></i> Applications</a></li>
+        <!-- /end of primary copy -->
+
+        <!-- secondary navigation items -->
+        <li class="visible-xs section-header">More</li>
+        <li><a href="https://metrics.torproject.org/news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
+        <li><a href="https://metrics.torproject.org/sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
+        <li><a href="https://metrics.torproject.org/operation.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Operation</a></li>
+        <li><a href="https://metrics.torproject.org/development.html"><i class="fa fa-code fa-fw hidden-sm" aria-hidden="true"></i> Development</a></li>
+        <li><a href="https://metrics.torproject.org/research.html"><i class="fa fa-university fa-fw hidden-sm" aria-hidden="true"></i> Research</a></li>
+        <li><a href="https://metrics.torproject.org/about.html"><i class="fa fa-lightbulb-o fa-fw hidden-sm" aria-hidden="true"></i> About</a></li>
+        <!-- /secondary navigation items -->
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!-- /secondary navigation -->
+
+<!-- page header for every single page -->
+<div class="page-header hidden-xs">
+  <a href="/"><img src="images/tor-metrics-white@2x.png" width="232" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
+  <div>
+    <p>
+      <i>&ldquo;Tor metrics are the ammunition that lets Tor and other security advocates argue for a more private and secure Internet from a position of data, rather than just dogma or perspective.&rdquo;<br><small>&mdash; Bruce Schneier (June 1, 2016)</small></i>
+    </p>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<!-- /page header -->
+
+<!-- primary navigation -->
+<nav class="navbar navbar-default hidden-xs">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-primary">
+      <ul class="nav navbar-nav">
+        <li><a href="https://metrics.torproject.org/"><i class="fa fa-home fa-fw hidden-sm" aria-hidden="true"></i> Home</a></li>
+        <li class=""><a href="https://metrics.torproject.org/userstats-relay-country.html"><i class="fa fa-users fa-fw hidden-sm" aria-hidden="true"></i> Users</a></li>
+        <li class=""><a href="https://metrics.torproject.org/networksize.html"><i class="fa fa-server fa-fw hidden-sm" aria-hidden="true"></i> Servers</a></li>
+        <li class=""><a href="https://metrics.torproject.org/bandwidth.html"><i class="fa fa-road fa-fw hidden-sm" aria-hidden="true"></i> Traffic</a></li>
+        <li class=""><a href="https://metrics.torproject.org/torperf.html"><i class="fa fa-dashboard fa-fw hidden-sm" aria-hidden="true"></i> Performance</a></li>
+        <li class=""><a href="https://metrics.torproject.org/hidserv-dir-onions-seen.html"><i class="fa fa-map-signs fa-fw hidden-sm" aria-hidden="true"></i> Onion Services</a></li>
+        <li class=""><a href="https://metrics.torproject.org/webstats-tb.html"><i class="fa fa-download fa-fw hidden-sm" aria-hidden="true"></i> Applications</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!-- /primary navigation -->
+
+<div class="container">
+  <ul class="breadcrumb">
+    <li><a href="https://metrics.torproject.org/">Home</a></li>
+    <li class="active">Relay Search</li>
+  </ul>
+  <h1>Relay Search</h1>
+  <div class="progress progress-info progress-striped active">
+    <div class="bar"></div>
+  </div>
+  <div id="content">
+    <noscript>
+      <div class="page-header">
+        <h1>JavaScript required</h1>
+      </div>
+      <p class="lead">Please enable JavaScript to use this service.</p>
+    </noscript>
+  </div>
+</div> <!-- /container -->
+
+<script data-main="js/main" src="js/libs/require/require.js"></script>
+
+  <div class="container-fluid" id="footer">
+
+    <div class="container no-gutter">
+      <div class="col-xs-6">
+        <p>
+           &copy; 2009&ndash;2017 <a href="https://www.torproject.org/" target="_blank">The Tor Project</a>
+        </p>
+      </div>
+      <div class="col-xs-6">
+        <p class="pull-right">
+
+           <a href="https://metrics.torproject.org/about.html#contact">Contact</a>
+
+        </p>
       </div>
     </div>
 
-    <div class="container">
-      <div class="progress progress-info progress-striped active">
-        <div class="bar"></div>
-      </div>
-      <div id="content">
-        <noscript>
-          <div class="page-header">
-          <h1>JavaScript required</h1>
-          </div>
-          <p class="lead">Please enable JavaScript to use this service.</p>
-        </noscript>
-      </div>
-      <hr/>
-      <footer>
-              The Tor Project - <div style="display: inline" id="year"></div><br/>
-              <a href="https://trac.torproject.org/projects/tor/wiki/doc/Atlas">Wiki</a> -
-      <a href="https://gitweb.torproject.org/atlas.git">Source code</a> -
-          <a href="https://trac.torproject.org/projects/tor/newticket?component=Metrics/Atlas">Report a bug</a>
-          - <a href="mailto:irl@torproject.org">Contact</a>
-      </footer>
+    <div class="container small">
 
-    </div> <!-- /container -->
-   	<script data-main="js/main" src="js/libs/require/require.js"></script>
-    <script type="text/javascript">
-        document.getElementById("year").innerHTML = (new Date()).getUTCFullYear();
-    </script>
+        <p>This material is supported in part by the National Science Foundation
+under Grant No. CNS-0959138. Any opinions, finding, and conclusions or
+recommendations expressed in this material are those of the author(s) and do not
+necessarily reflect the views of the National Science Foundation. "Tor" and the
+"Onion Logo" are <a href="https://www.torproject.org/docs/trademark-faq.html.en"
+target="_blank">registered trademarks</a> of The Tor Project, Inc.. Data on this
+site is freely available under a <a
+href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0 no
+copyright declaration</a>: To the extent possible under law, the Tor Project has
+waived all copyright and related or neighboring rights in the data. Graphs are
+licensed under a <a href="https://creativecommons.org/licenses/by/3.0/us/"
+target="_blank">Creative Commons Attribution 3.0 United States License</a>.</p>
 
+    </div>
 
-  </body>
+  </div><!-- /footer -->
+
+</div><!-- /wrapper -->
+
+</body>
 </html>
-
 
