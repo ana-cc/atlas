@@ -69,13 +69,27 @@ define([
             var mins = Math.floor(secs/60);
             var hours = Math.floor(mins/60);
             var days = Math.floor(hours/24);
+            var years = Math.floor(days/365);
             // XXX check if this formula is correct.
             secs = secs % 60;
             mins = mins % 60;
             hours = hours % 24;
+            days = days % 365;
+
             var hr_date = "";
             var hr_date_full = "";
             var hr = 0;
+
+            if (years > 0) {
+                hr_date += years + "y ";
+                hr += 1;
+                if (years > 1) {
+                    hr_date_full += years + " years ";
+                } else {
+                    hr_date_full += years + " year ";
+                }
+            }
+
             if (days > 0) {
                 hr_date += days + "d ";
                 hr += 1;
@@ -216,4 +230,3 @@ define([
 
 	return relayModel;
 });
-
