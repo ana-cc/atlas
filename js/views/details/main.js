@@ -33,8 +33,7 @@ define([
             var svg = d3.select("#" + g).append("svg:svg")
                 .attr("version", 1.1)
                 .attr("xmlns", "http://www.w3.org/2000/svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .attr("viewBox", "0 0 550 342")
                 .append("g")
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
