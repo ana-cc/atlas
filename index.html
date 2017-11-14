@@ -22,6 +22,7 @@
 
   <!-- jQuery -->
   <script src="https://metrics.torproject.org/js/jquery-3.2.1.min.js"></script>
+  <script src="js/jquery.cookieBar.js"></script>
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -49,6 +50,13 @@
 <!-- Using evil inline stylesheets to hide the FOUC for slow connections... -->
 
 <div id="wrapper" style="display:none;">
+
+  <div class="fixed-top cookie-message pt-1" style="background-color: #333; color: #eee;">
+  <div style="padding: 10px;">
+  Relay Search is the new name for Atlas. This rebranding is part of work aiming to merge this tool into the Tor Metrics website. No URLs have been changed at this time and we will implement redirects when the change does occur. Technical details may be found on the <a href="https://trac.torproject.org/projects/tor/ticket/23518">Tor Project bug tracker</a>. Hiding this message will result in a cookie being stored on your computer to prevent this message being shown again in the future.
+      <a class="btn btn-sm btn-warning cbc" style="color:black;" href="#">Hide</a>
+  </div>
+  </div>
 
 <!-- secondary navigation -->
 <nav class="navbar navbar-default navbar-secondary">
@@ -145,6 +153,9 @@
   </div>
 </div> <!-- /container -->
 
+<script>
+$('.cookie-message').cookieBar({ closeButton: '.cbc' });
+</script>
 <script data-main="js/main" src="js/libs/require/require.js"></script>
 
   <div class="container-fluid" id="footer">
