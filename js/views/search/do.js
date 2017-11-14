@@ -112,7 +112,7 @@ define([
 
         },
         render: function(query){
-            document.title = "Atlas";
+            document.title = "Relay Search";
             this.filtering();
             var asInitVals = new Array();
             var compiledTemplate = _.template(doSearchTemplate, {query: query, relays: this.relays, countries: CountryCodes, error: this.error});

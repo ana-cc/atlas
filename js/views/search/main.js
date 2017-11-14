@@ -9,7 +9,7 @@ define([
 	    el: $("#content"),
 
 	    render: function(query){
-			document.title = "Atlas";
+			document.title = "Relay Search";
 			var data = {};
 			var compiledTemplate = _.template(mainSearchTemplate, data);
 			this.el.html(compiledTemplate);

@@ -1,8 +1,9 @@
-Atlas
-=====
+Relay Search
+============
 
-Atlas is a web application to discover Tor relays. It provides useful
-information on how relays are configured along with diagrams about their past.
+Relay Search, formerly known as Atlas, is a web application to discover Tor
+relays. It provides useful information on how relays are configured along with
+diagrams about their past.
 
 
 Running it

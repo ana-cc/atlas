@@ -178,7 +178,7 @@ define([
                 compiledTemplate = _.template(bridgeDetailsTemplate, data);
             else
                 compiledTemplate = _.template(routerDetailsTemplate, data);
-            document.title = "Atlas: " + this.model.get('nickname');
+            document.title = "Relay Search: " + this.model.get('nickname');
             this.el.html(compiledTemplate);
             var graph = this.graph;
             var plot = this.plot;
