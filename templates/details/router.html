@@ -120,7 +120,7 @@
     <%=propertyCount==0?'none':''%>
     </dd>
 
-    <dt><span class="tip" title="Host name as found in a reverse DNS lookup of the relay's first IP address. This field is updated at most once in 12 hours, unless the relay IP address changes. Omitted if the relay IP address was not looked up, if no lookup request was successful yet or if no A record was found matching the PTR record.">Host Name</span></dt>
+    <dt><span class="tip" title="Host name as found in a reverse DNS lookup of the relay's primary IP address. This field is updated at most once in 12 hours, unless the relay IP address changes. Omitted if the relay IP address was not looked up, if no lookup request was successful yet or if no A record was found matching the PTR record.">Host Name</span></dt>
     <dd><% if (relay.get('host_name')) { %><%= relay.get('host_name') %><% } else { %>No PTR record found<% } %></dd>
 
     <dt><span class="tip" title="Country as found in a GeoIP database by resolving the relay's first onion-routing address.">Country</span></dt>
