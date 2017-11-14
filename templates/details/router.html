@@ -29,6 +29,9 @@
       <dt><span class="tip" title="Address and port where the relay listens for directory requests.">Dir Address</span></dt>
       <dd><%= relay.get('dir_address') ? relay.get('dir_address') : 'none' %></dd>
 
+      <dt><span class="tip" title="Addresses that the relay used to exit to the Internet in the past 24 hours. <em>Only lists addresses that are different from the OR addresses.</em>">Exit Addresses</span></dt>
+      <dd><%= relay.get('exit_addresses') ? relay.get('exit_addresses') : 'none' %></dd>
+
       <dt>
       <span class="tip" title="Bandwidth that the relay is willing and able to provide in bytes per second.">Advertised Bandwidth</span>
       </dt>
