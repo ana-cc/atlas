@@ -117,6 +117,14 @@
             <span class="inline">Outdated Tor version</span>
         </span>
     <% } %>
+    <% if (relay.get('measured') === false) {
+        propertyCount++;
+        %>
+        <span class="tip flags" title="This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays.">
+            <img class="inline" alt="" src="img/properties/unmeasured_16x16.png"/>
+            <span class="inline">Unmeasured</span>
+        </span>
+    <% } %>
     <%=propertyCount==0?'none':''%>
     </dd>
 

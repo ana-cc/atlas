@@ -106,6 +106,9 @@
                 <img class="tip" src="img/properties/not_recommended_16x16.png" alt="Outdated Tor version" title="Outdated Tor version<br />This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."/>
                 <% } %>
             <% } %>
+           <% if (relay.get('measured') === false) { %>
+                <img class="tip" src="img/properties/unmeasured_16x16.png" alt="Unmeasured" title="Unmeasured<br />This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays.">
+          <% } %>
             </td>
 			<td><%= relay.get('or_port') %></td>
 			<td><%= relay.get('dir_port') %></td>
