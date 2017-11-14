@@ -14,8 +14,8 @@ define([
 			var compiledTemplate = _.template(mainSearchTemplate, data);
 			this.el.html(compiledTemplate);
 
-            $("#do-top10").bind('click', function(){
-                document.location = "#top10";
+            $("#do-top-relays").bind('click', function(){
+                document.location = "#toprelays";
                 return false;
             });
 

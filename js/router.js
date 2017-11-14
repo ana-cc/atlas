@@ -13,7 +13,8 @@ define([
        // Define the routes for the actions in Atlas
     	'details/:fingerprint': 'mainDetails',
     	'search/:query': 'doSearch',
-	'top10': 'showTop10',
+        'top10': 'showTopRelays',
+        'toprelays': 'showTopRelays',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -92,19 +93,19 @@ define([
             });
         }
     },
-    showTop10: function(){
-        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top 10 Relays</li>");
+    showTopRelays: function(){
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top Relays</li>");
 
         $("#content").hide();
         $(".progress").show();
 
-        doSearchView.collection.url = "https://onionoo.torproject.org/summary?type=relay&order=-consensus_weight&limit=10&running=true";
+        doSearchView.collection.url = "https://onionoo.torproject.org/summary?type=relay&order=-consensus_weight&limit=50&running=true";
             doSearchView.collection.lookup({
                 success: function(err){
                     doSearchView.relays = doSearchView.collection.models;
                     doSearchView.error = err;
                     doSearchView.render("");
-		    $("#search-title").text("Top 10 Relays by Consensus Weight");
+		    $("#search-title").text("Top Relays by Consensus Weight");
                     $(".progress").hide();
                     $("#content").show();
                 },
