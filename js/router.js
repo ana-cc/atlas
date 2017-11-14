@@ -38,21 +38,21 @@ define([
     	        mainDetailsView.render();
                 $(".progress").hide();
                 $("#content").show();
-                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Details for " + relay.get('nickname') + "</li>");
+                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Details for " + relay.get('nickname') + "</li>");
 
             },
             error: function() {
                 mainDetailsView.error();
                 $(".progress").hide();
                 $("#content").show();
-                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
+                $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
             }
         });
     },
 
     // Perform a search on Atlas
     doSearch: function(query){
-        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
 
         $("#content").hide();
         $(".progress").show();
@@ -93,7 +93,7 @@ define([
         }
     },
     showTop10: function(){
-        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top 10 Relays</li>");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top 10 Relays</li>");
 
         $("#content").hide();
         $(".progress").show();
@@ -120,7 +120,7 @@ define([
 
     // No matched rules go to the default home page
     defaultAction: function(actions){
-        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li class=\"active\">Relay Search</li>");
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li class=\"active\">Relay Search</li>");
 
         mainSearchView.render();
 
