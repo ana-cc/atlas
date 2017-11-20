@@ -154,21 +154,7 @@ define([
             var days = Math.floor(hours/24);
             return days < 15;
         },
-        lookup: function(options) {
-            var success = options.success;
-            var error = options.error;
-            var model = this;
-            var xhr = $.getJSON(this.baseurl+'/details?lookup='+this.fingerprint, function(data) {
-                checkIfDataIsUpToDate(xhr.getResponseHeader("Last-Modified"));
-                var relay = null;
-                if (data.relays.length >= 1) {
-                    relay = data.relays[0];
-                    relay.is_bridge = false;
-                } else if (data.bridges.length >= 1) {
-                    relay = data.bridges[0];
-                    relay.is_bridge = true;
-                }
-                if (relay) {
+        processRelay: function(options, model, relay) {
                     relay.contact = relay.contact ? relay.contact : 'undefined';
                     relay.platform = relay.platform ? relay.platform : null;
                     relay.recommended_version = (typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : null;
@@ -219,13 +205,37 @@ define([
                     var size = ['16x16', '14x16', '8x16'];
                     relay.flags = model.parseflags(relay.flags, size);
                     model.set(relay, options);
-                    success(model, relay);
-                } else {
-                    error(model)
-                }
-            }).fail(function() {
-                error();
-            });
+
+        },
+        lookup: function(options) {
+            var success = options.success;
+            var error = options.error;
+            var model = this;
+            if (model.relay) {
+                var relay = model.relay;
+                model.processRelay(options, model, relay);
+                success(model, relay);
+            } else {
+                var xhr = $.getJSON(this.baseurl+'/details?lookup='+this.fingerprint, function(data) {
+                    checkIfDataIsUpToDate(xhr.getResponseHeader("Last-Modified"));
+                    var relay = null;
+                    if (data.relays.length >= 1) {
+                        relay = data.relays[0];
+                        relay.is_bridge = false;
+                    } else if (data.bridges.length >= 1) {
+                        relay = data.bridges[0];
+                        relay.is_bridge = true;
+                    }
+                    if (relay) {
+                        model.processRelay(options, model, relay);
+                        success(model, relay);
+                    } else {
+                        error(model)
+                    }
+                }).fail(function() {
+                    error();
+                });
+            }
         }
 
 	});

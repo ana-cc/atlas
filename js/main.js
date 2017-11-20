@@ -13,6 +13,7 @@ require.config({
     datatablessort: 'libs/datatables/dataTables.Sorting',
     tooltip: 'libs/bootstrap/bootstrap-tooltip',
     typeahead: 'libs/bootstrap/bootstrap3-typeahead.min',
+    datatablesbs: 'libs/datatables/dataTables.bootstrap',
     d3js: 'libs/d3js/d3.v3.min',
     jssha: 'libs/jssha/sha1',
     templates: '../templates'

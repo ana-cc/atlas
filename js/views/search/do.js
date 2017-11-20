@@ -9,7 +9,8 @@ define([
   'datatablessort',
   'tooltip',
   'helpers',
-  'typeahead'
+  'typeahead',
+  'datatablesbs'
 ], function($, _, Backbone, resultsCollection, doSearchTemplate){
   var doSearchView = Backbone.View.extend({
 	    el: $("#content"),
