@@ -64,7 +64,8 @@
       </dd>
     </dl>
 
-    <dt><span class="tip" title="Relays that are part of this relay's family and consider this relay to be part of their family.">Effective Family Members</span></dt>
+    <dt><span class="tip" title="Relays that are part of this relay's family and consider this relay to be part of their family.">Effective Family Members</span>
+    <% if (relay.get('effective_family') !== null) { %><a href="#search/family:<%= relay.get('fingerprint') %>"><i class="fa fa-search"></i></a><% } %></dt>
     <dd>
         <pre class="pre-scrollable"><% if (relay.get('effective_family') !== null) { %><% _.each(relay.get('effective_family'), function(member) { %><% var valid = member.match(RegExp("^\$?[A-F0-9]{40}$")); %>
 <% if (valid) { %><a href="#details/<%= member.replace('$', '') %>"><% } %><%= member %><% if (valid) { %></a><% }}); %>
