@@ -99,7 +99,7 @@ define([
         $("#content").hide();
         $(".progress").show();
 
-        doSearchView.collection.url = "https://onionoo.torproject.org/summary?type=relay&order=-consensus_weight&limit=50&running=true";
+        doSearchView.collection.url = "https://onionoo.torproject.org/details?type=relay&order=-consensus_weight&limit=250&running=true";
             doSearchView.collection.lookup({
                 success: function(err){
                     doSearchView.relays = doSearchView.collection.models;
