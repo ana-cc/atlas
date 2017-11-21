@@ -82,3 +82,8 @@ dd {
     -moz-hyphens: auto;
     hyphens: auto;
 }
+
+/* Override style.css from metrics.torproject.org style */
+td a {
+    padding-right: 0 !important;
+}

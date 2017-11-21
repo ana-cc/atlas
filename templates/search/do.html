@@ -80,8 +80,10 @@
             </td>
 			<td>
             <a href="#details/<%= relay.get('fingerprint') %>">
-            <%= _.escape(relay.get('nickname')) %>
-            <% if (!relay.get('is_bridge')) { %>(<%= relay.get('effective_family') == null ? 1 : relay.get('effective_family').length + 1 %>)<% } %>
+            <%= _.escape(relay.get('nickname')) %></a>
+            <% if (!relay.get('is_bridge')) { %>
+	    (<a href="#search/family:<%= relay.get('fingerprint') %>"><%= relay.get('effective_family') == null ? 1 : relay.get('effective_family').length + 1 %></a>)
+            <% } %>
             </a>
             </td>
 			<td><span data-filter="<%= relay.get('bandwidth') %>"><%= relay.get('bandwidth_hr') %></span></td>
