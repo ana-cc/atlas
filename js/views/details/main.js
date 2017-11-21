@@ -179,58 +179,65 @@ define([
                 compiledTemplate = _.template(routerDetailsTemplate, data);
             document.title = "Relay Search: " + this.model.get('nickname');
             this.el.html(compiledTemplate);
-            var graph = this.graph;
-            var plot = this.plot;
-            this.graph.lookup_bw(this.model.fingerprint, {
-                success: function() {
-                    graph.parse_bw_data(graph.data);
-                    graphs = ['bw_month',
-                            'bw_months', 'bw_year', 'bw_years'];
-                    _.each(graphs, function(g) {
-                        var data = [graph.get(g).write, graph.get(g).read];
-                        var labels = ["written bytes per second", "read bytes per second"];
-                        var legendPos = [[140, 0], [310, 0]];
-                        var colors = ["#edc240", "#afd8f8"];
-                        plot(g, data, labels, legendPos, colors, "s", ".4s");
-                    });
-                }
-            });
 
-            if (!this.model.get('is_bridge')) {
-                this.graph.lookup_weights(this.model.fingerprint, {
-                    success: function() {
-                        graph.parse_weights_data(graph.data);
-                        graphs = ['weights_month',
-                                'weights_months', 'weights_year', 'weights_years'];
-                        _.each(graphs, function(g) {
-                            var data = [graph.get(g).cw, graph.get(g).middle,
-                                        graph.get(g).guard, graph.get(g).exit];
-                            var labels = ["consensus weight fraction",
-                                          "middle probability",
-                                          "guard probability",
-                                          "exit probability"];
-                            var legendPos = [[28, 0], [309, 0], [194, 0], [429, 0]];
-                            var colors = ["#afd8f8", "#edc240",
-                                          "#cb4b4b", "#4da74d"];
-                            plot(g, data, labels, legendPos, colors, ".4%", ".6%");
-                        });
-                    }
-                });
+            canSvg = !!(document.createElementNS && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect);
+            if (canSvg) {
+              var graph = this.graph;
+              var plot = this.plot;
+              this.graph.lookup_bw(this.model.fingerprint, {
+                  success: function() {
+                      graph.parse_bw_data(graph.data);
+                      graphs = ['bw_month',
+                              'bw_months', 'bw_year', 'bw_years'];
+                      _.each(graphs, function(g) {
+                          var data = [graph.get(g).write, graph.get(g).read];
+                          var labels = ["written bytes per second", "read bytes per second"];
+                          var legendPos = [[140, 0], [310, 0]];
+                          var colors = ["#edc240", "#afd8f8"];
+                          plot(g, data, labels, legendPos, colors, "s", ".4s");
+                      });
+                  }
+              });
+
+              if (!this.model.get('is_bridge')) {
+                  this.graph.lookup_weights(this.model.fingerprint, {
+                      success: function() {
+                          graph.parse_weights_data(graph.data);
+                          graphs = ['weights_month',
+                                  'weights_months', 'weights_year', 'weights_years'];
+                          _.each(graphs, function(g) {
+                              var data = [graph.get(g).cw, graph.get(g).middle,
+                                          graph.get(g).guard, graph.get(g).exit];
+                              var labels = ["consensus weight fraction",
+                                            "middle probability",
+                                            "guard probability",
+                                            "exit probability"];
+                              var legendPos = [[28, 0], [309, 0], [194, 0], [429, 0]];
+                              var colors = ["#afd8f8", "#edc240",
+                                            "#cb4b4b", "#4da74d"];
+                              plot(g, data, labels, legendPos, colors, ".4%", ".6%");
+                          });
+                      }
+                  });
+              } else {
+                  this.graph.lookup_clients(this.model.fingerprint, {
+                      success: function() {
+                          graph.parse_clients_data(graph.data);
+                          graphs = ['clients_month',
+                                  'clients_months', 'clients_year', 'clients_years'];
+                          _.each(graphs, function(g) {
+                              var data = [graph.get(g).average];
+                              var labels = ["average number of connected clients"];
+                              var legendPos = [[3, 0]];
+                              var colors = ["#edc240"];
+                              plot(g, data, labels, legendPos, colors, "g", ".2g");
+                          });
+                      }
+                  });
+              }
             } else {
-                this.graph.lookup_clients(this.model.fingerprint, {
-                    success: function() {
-                        graph.parse_clients_data(graph.data);
-                        graphs = ['clients_month',
-                                'clients_months', 'clients_year', 'clients_years'];
-                        _.each(graphs, function(g) {
-                            var data = [graph.get(g).average];
-                            var labels = ["average number of connected clients"];
-                            var legendPos = [[3, 0]];
-                            var colors = ["#edc240"];
-                            plot(g, data, labels, legendPos, colors, "g", ".2g");
-                        });
-                    }
-                });
+              $(".history-tabs").hide();
+              $("#history-tab-content").html("Graphs cannot be shown as your browser does not support Scalable Vector Graphics (SVG). This is the case when Tor Browser is in High Security mode.");
             }
 
             $(".tip").tooltip({ placement: 'right' });
