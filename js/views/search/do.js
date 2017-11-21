@@ -42,8 +42,8 @@ define([
                     ],
                 // Save the state of the tables
                 "sDom": "<'row'<'span6'l><'span6 hide'f>r>t<'row'<'span6'i><'span6'p>>",
-				"bStateSave": false,
-				"aaSorting": [],
+		"bStateSave": false,
+		"aaSorting": [[2, "desc"]],
                 "fnDrawCallback": function( oSettings ) {
                     // Make the tooltips
                     $(".tip").tooltip();
