@@ -40,6 +40,7 @@ define([
                 $(".progress").hide();
                 $("#content").show();
                 $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Details for " + relay.get('nickname') + "</li>");
+                $("#secondary-search").show();
 
             },
             error: function() {
@@ -47,6 +48,7 @@ define([
                 $(".progress").hide();
                 $("#content").show();
                 $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
+                $("#secondary-search").show();
             }
         });
     },
@@ -54,6 +56,8 @@ define([
     // Perform a search on Atlas
     doSearch: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
+        $("#secondary-search").show();
+        $("#secondary-search-query").val(query);
 
         $("#content").hide();
         $(".progress").show();
@@ -96,6 +100,9 @@ define([
     showTopRelays: function(){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top Relays</li>");
 
+        $("#secondary-search").show();
+        $("#secondary-search-query").val("");
+
         $("#content").hide();
         $(".progress").show();
 
@@ -122,6 +129,8 @@ define([
     // No matched rules go to the default home page
     defaultAction: function(actions){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li class=\"active\">Relay Search</li>");
+        $("#secondary-search").hide();
+        $("#secondary-search-query").val("");
 
         mainSearchView.render();
 
@@ -134,6 +143,22 @@ define([
   var initialize = function(){
     var app_router = new AppRouter;
     Backbone.history.start();
+
+    $("#secondary-search-submit").bind('click', function(){
+      document.location = "#search/"+encodeURI($('#secondary-search-query').val());
+      return false;
+    });
+
+    $("#secondary-search-clear").bind('click', function(){
+      $("#secondary-search-query").val("");
+      return false;
+    });
+
+    $("#secondary-search").bind('submit', function(){
+      document.location = "#search/"+encodeURI($('#secondary-search-query').val());
+      return false;
+    });
+
   };
   return {
     initialize: initialize
