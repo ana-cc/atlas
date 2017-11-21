@@ -128,6 +128,14 @@
             <span class="inline">Unmeasured</span>
         </span>
     <% } %>
+    <% if (relay.get('fallback_dir') === true) {
+        propertyCount++;
+        %>
+        <span class="tip flags" title="Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports.">
+            <img class="inline" alt="" src="img/properties/fallbackdir_16x16.png"/>
+            <span class="inline">FallbackDir</span>
+        </span>
+    <% } %>
     <%=propertyCount==0?'none':''%>
     </dd>
 

@@ -3,7 +3,8 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'helpers'
+  'helpers',
+  'fallbackdir'
 ], function($, _, Backbone){
 
 	var relayModel = Backbone.Model.extend({
@@ -159,6 +160,7 @@ define([
                     relay.platform = relay.platform ? relay.platform : null;
                     relay.recommended_version = (typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : null;
                     relay.measured = (typeof relay.measured !== 'undefined') ? relay.measured : null;
+                    relay.fallback_dir = IsFallbackDir(relay.fingerprint);
                     relay.nickname = relay.nickname ? relay.nickname : "Unnamed";
                     relay.dir_address = relay.dir_address ? relay.dir_address : null;
                     relay.exit_policy = relay.exit_policy ? relay.exit_policy : null;

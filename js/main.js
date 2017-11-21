@@ -16,7 +16,8 @@ require.config({
     datatablesbs: 'libs/datatables/dataTables.bootstrap',
     d3js: 'libs/d3js/d3.v3.min',
     jssha: 'libs/jssha/sha1',
-    templates: '../templates'
+    templates: '../templates',
+    fallbackdir: 'fallback_dir'
   }
 
 });
