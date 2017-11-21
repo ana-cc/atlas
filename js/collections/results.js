@@ -26,12 +26,14 @@ define([
                     crelay = new relayModel;
                     crelay.fingerprint = relay.fingerprint;
                     crelay.relay = relay;
+                    crelay.relay.is_bridge = false;
                     relays.push(crelay);
                 });
                 _.each(response.bridges, function(relay, resultsC) {
                     crelay = new relayModel;
                     crelay.fingerprint = relay.hashed_fingerprint;
                     crelay.relay = relay;
+                    crelay.relay.is_bridge = true;
                     relays.push(crelay);
                 });
                 if (relays.length == 0) {
