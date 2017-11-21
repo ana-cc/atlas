@@ -175,7 +175,6 @@ define([
                         var new_addresses = [];
                         _.each(relay.or_addresses, function(or_addr) {
                             var addr = or_addr[0] == '[' ? "IPv6" : "IPv4";
-                            addr += or_addr.slice(or_addr.lastIndexOf(":"));
                             new_addresses.push(addr);
                         });
                         relay.or_addresses = new_addresses;
