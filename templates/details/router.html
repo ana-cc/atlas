@@ -33,7 +33,7 @@
       <dd><%= relay.get('exit_addresses') ? relay.get('exit_addresses') : 'none' %></dd>
 
       <dt>
-      <span class="tip" title="Bandwidth that the relay is willing and able to provide in bytes per second.">Advertised Bandwidth</span>
+      <span class="tip" title="The volume of traffic, both incoming and outgoing, that the relay is willing to sustain, as configured by the operator and claimed to be observed from recent data transfers.">Advertised Bandwidth</span>
       </dt>
       <dd><span class="tip" title="Bandwidth rate: <%= relay.get('bandwidthr') %><br>Bandwidth burst: <%= relay.get('bandwidthb') %><br>Observed bandwidth: <%= relay.get('obandwidth') %>"><%= relay.get('bandwidth_hr') %></span></dd>
       <dt><span class="tip" title="Port summary of IPv4 exit connections that the relay is going to accept or reject.">IPv4 Exit Policy Summary</span></dt>

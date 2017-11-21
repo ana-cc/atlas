@@ -19,7 +19,7 @@
       <dd><%= relay.get('or_addresses') %></dd>
 
       <dt>
-      <span class="tip" title="Bandwidth that the bridge is willing and able to provide in bytes per second.">Advertised Bandwidth</span>
+      <span class="tip" title="The volume of traffic, both incoming and outgoing, that this bridge is willing to sustain, as configured by the operator and claimed to be observed from recent data transfers.">Advertised Bandwidth</span>
       </dt>
       <dd><%= relay.get('bandwidth_hr') ? relay.get('bandwidth_hr') : 'not defined' %></dd>
     </dl>
