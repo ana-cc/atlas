@@ -35,7 +35,7 @@ define([
                         null,   //Country
                         { "sType":  "ip-address" },  //IP Address
                         null,   //Flags
-                        null,   //Properties
+                        null,   //Additional Flags
                         null,   //ORPort
                         null,   //DirPort
                         null    //Type
