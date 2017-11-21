@@ -20,14 +20,12 @@ define([
             });
 
             $("#do-search").bind('click', function(){
-                var query = _.escape($('#query').val());
-                document.location = "#search/"+query;
+                document.location = "#search/"+encodeURI($('#query').val());
                 return false;
             });
 
             $("#home-search").bind('submit', function(){
-                var query = _.escape($('#query').val());
-                document.location = "#search/"+query;
+                document.location = "#search/"+encodeURI($('#query').val());
                 return false;
             });
 	    }
