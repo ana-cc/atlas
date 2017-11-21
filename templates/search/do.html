@@ -55,7 +55,7 @@
 	<thead>
 		<tr>
 			<th></th>
-			<th>Nickname</th>
+			<th>Nickname<sup>&dagger;</sup></th>
 			<th>Bandwidth</th>
 			<th>Uptime</th>
 			<th>Country</th>
@@ -81,6 +81,7 @@
 			<td>
             <a href="#details/<%= relay.get('fingerprint') %>">
             <%= _.escape(relay.get('nickname')) %>
+            <% if (!relay.get('is_bridge')) { %>(<%= relay.get('effective_family') == null ? 1 : relay.get('effective_family').length + 1 %>)<% } %>
             </a>
             </td>
 			<td><span data-filter="<%= relay.get('bandwidth') %>"><%= relay.get('bandwidth_hr') %></span></td>
@@ -123,6 +124,11 @@
 <% }); %>
 	</tbody>
 </table>
+<p><sup>&dagger;</sup>The number shown in brackets is the total effective
+family size for the relay including the relay itself. A size of 1 indicates
+that the relay does not have any other effective family members. Note that
+bridge relays do not advertise family members in their descriptors and so there
+is no value shown for bridge relays.</p>
 <% } %>
 </div>
 
