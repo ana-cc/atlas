@@ -228,6 +228,8 @@ define([
                         relay.is_bridge = true;
                     }
                     if (relay) {
+                        relay.bridgesPublished = data.bridges_published;
+                        relay.relaysPublished = data.relays_published;
                         model.processRelay(options, model, relay);
                         success(model, relay);
                     } else {

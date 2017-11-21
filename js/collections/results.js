@@ -19,6 +19,8 @@ define([
                 this.fresh_until = response.fresh_until;
                 this.valid_after = response.valid_after;
                 var relays = [];
+                var relaysPublished = response.relays_published;
+                var bridgesPublished = response.bridges_published;
                 options.error = function(options) {
                     error(options.error, collection, options);
                 }
@@ -48,7 +50,7 @@ define([
                     var lookedUp = function() {
                       lookedUpRelays++;
                       if (lookedUpRelays == relays.length) {
-                        success(err);
+                        success(err, relaysPublished, bridgesPublished);
                       }
                     }
                     relay.lookup({

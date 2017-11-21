@@ -20,7 +20,7 @@ define([
         render: function(query){
             document.title = "Relay Search";
             var asInitVals = new Array();
-            var compiledTemplate = _.template(doSearchTemplate, {query: query, relays: this.relays, countries: CountryCodes, error: this.error});
+            var compiledTemplate = _.template(doSearchTemplate, {query: query, relays: this.relays, countries: CountryCodes, error: this.error, relaysPublished: this.relaysPublished, bridgesPublished: this.bridgesPublished});
 			this.el.html(compiledTemplate);
             var fp = this;
             loadSortingExtensions();

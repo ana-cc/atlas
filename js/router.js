@@ -71,7 +71,7 @@ define([
             doSearchView.collection.url =
                 doSearchView.collection.baseurl + this.hashFingerprint(query);
             doSearchView.collection.lookup({
-                success: function(err){
+                success: function(err, relaysPublished, bridgesPublished){
                     doSearchView.relays = doSearchView.collection.models;
 
                     // Redirect to the details page when there is exactly one
@@ -82,6 +82,8 @@ define([
                         return;
                     }
 		    doSearchView.error = err;
+                    doSearchView.relaysPublished = relaysPublished;
+                    doSearchView.bridgesPublished = bridgesPublished;
                     doSearchView.render(query);
 		    $("#search-title").text(query);
                     $(".progress").hide();
