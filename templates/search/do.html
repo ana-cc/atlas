@@ -102,19 +102,7 @@
             <% _.each(relay.get('flags'), function(flag) { %><img class="tip flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>
             <td>
-            <% if (relay.get('recommended_version') === false) { %>
-                <% if (relay.get('is_bridge')) { %>
-                <img class="tip" src="img/properties/not_recommended_16x16.png" alt="Outdated Tor version" title="Outdated Tor version<br />This bridge is running a Tor version that is not recommended by the directory authorities and may contain known issues."/>
-                <% } else { %>
-                <img class="tip" src="img/properties/not_recommended_16x16.png" alt="Outdated Tor version" title="Outdated Tor version<br />This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."/>
-                <% } %>
-            <% } %>
-           <% if (relay.get('measured') === false) { %>
-                <img class="tip" src="img/properties/unmeasured_16x16.png" alt="Unmeasured" title="Unmeasured<br />This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays.">
-          <% } %>
-           <% if (relay.get('fallback_dir') === true) { %>
-                <img class="tip" src="img/properties/fallbackdir_16x16.png" alt="Unmeasured" title="FallbackDir<br />Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports.">
-          <% } %>
+            <% _.each(relay.get('additional_flags'), function(flag) { %><img class="tip flags" src="img/properties/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>
 			<td><%= relay.get('or_port') %></td>
 			<td><%= relay.get('dir_port') %></td>

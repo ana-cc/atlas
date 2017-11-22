@@ -57,6 +57,22 @@ define([
             });
             return output;
         },
+        parseadditionalflags: function(flags) {
+            var output = [];
+            var model = this;
+            _.each(flags, function(flag) {
+                if (flag == "Not Recommended") {
+                    output.push([flag,"not_recommended_16x16", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."]);
+                }
+                if (flag == "Unmeasured") {
+                    output.push([flag,"unmeasured_16x16", "This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays."]);
+                }
+                if (flag == "FallbackDir") {
+                    output.push([flag,"fallbackdir_16x16", "Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports."]);
+                }
+            });
+            return output;
+        },
         parsedate: function(utctime) {
             var hr_magic = [10];
             var t = utctime.split(" ");
@@ -158,9 +174,6 @@ define([
         processRelay: function(options, model, relay) {
                     relay.contact = relay.contact ? relay.contact : 'undefined';
                     relay.platform = relay.platform ? relay.platform : null;
-                    relay.recommended_version = (typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : null;
-                    relay.measured = (typeof relay.measured !== 'undefined') ? relay.measured : null;
-                    relay.fallback_dir = IsFallbackDir(relay.fingerprint);
                     relay.nickname = relay.nickname ? relay.nickname : "Unnamed";
                     relay.dir_address = relay.dir_address ? relay.dir_address : null;
                     relay.exit_policy = relay.exit_policy ? relay.exit_policy : null;
@@ -205,6 +218,14 @@ define([
                     model.set({badexit: false});
                     var size = ['16x16', '14x16', '8x16'];
                     relay.flags = model.parseflags(relay.flags, size);
+
+                    /* Synthetic Additional Flags */
+                    var additional_flags = []
+                    if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true)) additional_flags.push("Not Recommended");
+                    if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
+                    if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
+                    relay.additional_flags = model.parseadditionalflags(additional_flags);
+
                     model.set(relay, options);
 
         },
