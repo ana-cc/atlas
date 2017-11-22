@@ -70,6 +70,12 @@ define([
                 if (flag == "FallbackDir") {
                     output.push([flag,"fallbackdir_16x16", "Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports."]);
                 }
+                if (flag == "IPv6 ORPort") {
+                    output.push([flag,"ipv6_or_16x16", "This relay accepts OR connections using IPv6."]);
+                }
+                if (flag == "IPv6 Exit") {
+                    output.push([flag,"ipv6_exit_16x16", "This relay allows exit connections using IPv6."]);
+                }
             });
             return output;
         },
@@ -195,6 +201,7 @@ define([
                         relay.or_addresses = new_addresses;
                     }
                     relay.or_address = relay.or_addresses ? relay.or_addresses[0].split(":")[0] : null;
+                    relay.or_v6_addresses = $.grep(relay.or_addresses, function(n, i) { return n.startsWith("["); });
                     relay.or_port = relay.or_addresses ? relay.or_addresses[0].split(":")[1] : 0;
                     relay.dir_port = relay.dir_address ? relay.dir_address.split(":")[1] : 0;
                     relay.exit_addresses = relay.exit_addresses ? relay.exit_addresses : null;
@@ -224,6 +231,9 @@ define([
                     if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true)) additional_flags.push("Not Recommended");
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
+                    if (relay.or_v6_addresses.length > 0) additional_flags.push("IPv6 ORPort");
+                    if (relay.exit_policy_v6_summary !== null) additional_flags.push("IPv6 Exit");
+
                     relay.additional_flags = model.parseadditionalflags(additional_flags);
 
                     model.set(relay, options);
