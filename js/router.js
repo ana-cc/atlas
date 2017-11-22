@@ -77,8 +77,8 @@ define([
                     // Redirect to the details page when there is exactly one
                     // search result.
                     if (doSearchView.relays.length == 1) {
-                        document.location = "#details/" +
-                            doSearchView.relays[0].fingerprint;
+                        document.location.replace("#details/" +
+                            doSearchView.relays[0].fingerprint);
                         return;
                     }
 		    doSearchView.error = err;
