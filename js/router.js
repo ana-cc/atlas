@@ -11,8 +11,10 @@ define([
   var AppRouter = Backbone.Router.extend({
     routes: {
        // Define the routes for the actions in Atlas
+        'details/': 'mainDetails',
     	'details/:fingerprint': 'mainDetails',
     	'search/:query': 'doSearch',
+    	'search/': 'doSearch',
         'top10': 'showTopRelays',
         'toprelays': 'showTopRelays',
     	// Default
@@ -29,9 +31,10 @@ define([
     // Show the details page of a node
     mainDetails: function(fingerprint){
 
-
         $("#content").hide();
         $(".progress").show();
+
+        fingerprint = ( fingerprint == null ) ? "" : fingerprint;
 
         mainDetailsView.model.fingerprint = this.hashFingerprint(fingerprint);
         mainDetailsView.model.lookup({
@@ -62,7 +65,7 @@ define([
         $("#content").hide();
         $(".progress").show();
 
-        if (query == "") {
+        if (query == null) {
 	    doSearchView.error = 5;
             doSearchView.renderError();
             $(".progress").hide();
@@ -73,7 +76,6 @@ define([
             doSearchView.collection.lookup({
                 success: function(err, relaysPublished, bridgesPublished){
                     doSearchView.relays = doSearchView.collection.models;
-
                     // Redirect to the details page when there is exactly one
                     // search result.
                     if (doSearchView.relays.length == 1) {

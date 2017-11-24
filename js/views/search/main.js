@@ -6,13 +6,13 @@ define([
   'text!templates/search/main.html',
 ], function($, _, Backbone, mainSearchTemplate){
   var mainSearchView = Backbone.View.extend({
-	    el: $("#content"),
+	    el: "#content",
 
 	    render: function(query){
 			document.title = "Relay Search";
 			var data = {};
-			var compiledTemplate = _.template(mainSearchTemplate, data);
-			this.el.html(compiledTemplate);
+			var compiledTemplate = _.template(mainSearchTemplate);
+			this.$el.html(compiledTemplate, data);
 
             $("#do-top-relays").bind('click', function(){
                 document.location = "#toprelays";

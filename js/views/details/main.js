@@ -15,7 +15,7 @@ define([
 ], function($, _, Backbone, relayModel, graphModel,
         routerDetailsTemplate, bridgeDetailsTemplate, errorDetailsTemplate){
     var mainDetailsView = Backbone.View.extend({
-        el: $("#content"),
+        el: "#content",
         initialize: function() {
            this.model = new relayModel;
            this.graph = new graphModel;
@@ -172,13 +172,13 @@ define([
             var data = {relay: this.model};
             var compiledTemplate;
             if (!this.model)
-                compiledTemplate = _.template(errorDetailsTemplate, data);
+                compiledTemplate = _.template(errorDetailsTemplate);
             else if (this.model.get('is_bridge'))
-                compiledTemplate = _.template(bridgeDetailsTemplate, data);
+                compiledTemplate = _.template(bridgeDetailsTemplate);
             else
-                compiledTemplate = _.template(routerDetailsTemplate, data);
+                compiledTemplate = _.template(routerDetailsTemplate);
             document.title = "Relay Search: " + this.model.get('nickname');
-            this.el.html(compiledTemplate);
+            this.$el.html(compiledTemplate(data));
 
             canSvg = !!(document.createElementNS && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect);
             if (canSvg) {
@@ -243,8 +243,8 @@ define([
             $(".tip").tooltip({ placement: 'right' });
         },
         error: function() {
-            var compiledTemplate = _.template(errorDetailsTemplate, {relay: null});
-            this.el.html(compiledTemplate);
+            var compiledTemplate = _.template(errorDetailsTemplate);
+            this.$el.html(compiledTemplate({'relay': null}));
         }
     });
     return new mainDetailsView;
