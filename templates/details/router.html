@@ -30,7 +30,15 @@
       <dd><%= relay.get('dir_address') ? relay.get('dir_address') : 'none' %></dd>
 
       <dt><span class="tip" title="Addresses that the relay used to exit to the Internet in the past 24 hours. <em>Only lists addresses that are different from the OR addresses.</em>">Exit Addresses</span></dt>
-      <dd><%= relay.get('exit_addresses') ? relay.get('exit_addresses') : 'none' %></dd>
+      <dd>
+        <% if (relay.get('exit_addresses')) { %>
+          <% _.each(relay.get('exit_addresses'), function(exit_address) { %>
+            <a href="#search/<%= exit_address %>"><%= exit_address %></a><br>
+          <% }); %>
+        <% } else { %>
+          none
+        <% } %>
+      </dd>
 
       <dt>
       <span class="tip" title="The volume of traffic, both incoming and outgoing, that the relay is willing to sustain, as configured by the operator and claimed to be observed from recent data transfers.">Advertised Bandwidth</span>
