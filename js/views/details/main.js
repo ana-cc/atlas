@@ -9,7 +9,6 @@ define([
   'text!templates/details/router.html',
   'text!templates/details/bridge.html',
   'text!templates/details/error.html',
-  'tooltip',
   'd3js',
   'helpers'
 ], function($, _, Backbone, relayModel, graphModel,
@@ -54,6 +53,7 @@ define([
             var xAxis = d3.svg.axis()
                 .scale(xScale)
                 .ticks(4)
+                .tickFormat(d3.time.format("%d %b %Y"))
                 .orient("bottom");
             var xAxisContainer = svg.append("g")
                 .attr("class", "x axis")
@@ -107,17 +107,8 @@ define([
                 .attr("d", line)
                 .style("fill", "none");
 
-            var datetimeFormat = function(seconds) {
-              var date = new Date(seconds);
-              return d3.time.format("%Y-%m-%d %H:%M")(date);
-            }
-
-            var tooltip = d3.select("body").append("div")
-                          .attr("class", "tooltip")
-                          .style("opacity", 0);
 
             /* Add dots for all line values, and add tooltips. */
-            var tooltipFormatter = d3.format(tooltipFormat);
             lineContainers.selectAll("circle")
                 .data(function(d) { return d; })
                 .enter()
@@ -128,11 +119,17 @@ define([
                 .attr("r", 3)
                 .style("fill", "white");
 
-            $("svg circle").tooltip({
+            $("#" + g + ">svg circle").tooltip({
               title: function() {
                 var d = this.__data__;
+                var datetimeFormat = function(seconds) {
+                  var date = new Date(seconds);
+                  return d3.time.format("%Y-%m-%d %H:%M")(date);
+                }
+                var tooltipFormatter = d3.format(tooltipFormat);
                 return datetimeFormat(d[0]) + ": " + tooltipFormatter(d[1]);
-              }
+              },
+              container: 'body'
             });
 
             /* Add a legend. */

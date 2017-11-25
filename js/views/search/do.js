@@ -9,8 +9,7 @@ define([
   'datatablessort',
   'helpers',
   'bootstrap',
-  'datatablesbs',
-  'tooltip'
+  'datatablesbs'
 ], function($, _, Backbone, resultsCollection, doSearchTemplate){
   var doSearchView = Backbone.View.extend({
     el: "#content",
@@ -48,7 +47,7 @@ define([
         "bStateSave": false,
         "aaSorting": [[2, "desc"]],
         "fnDrawCallback": function( oSettings ) {
-          $(".tip").tooltip();
+          $(".tip").tooltip({'html':true});
         }
       });
     },
