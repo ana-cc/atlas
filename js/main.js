@@ -3,6 +3,9 @@
 // based on work done by @jrburke
 // Configure require.js shortcut aliases
 require.config({
+  shim : {
+    "bootstrap" : { "deps" :['jquery'] }
+  },
   paths: {
     jquery: 'https://metrics.torproject.org/js/jquery-3.2.1.min',
     underscore: 'libs/underscore/underscore-min',
