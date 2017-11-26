@@ -11,7 +11,7 @@ define([
   'bootstrap',
   'datatablesbs'
 ], function($, _, Backbone, aggregatesCollection, aggregateSearchTemplate){
-  var doCountriesView = Backbone.View.extend({
+  var aggregateSearchView = Backbone.View.extend({
     el: "#content",
     initialize: function() {
       this.collection = new aggregatesCollection;
@@ -42,6 +42,6 @@ define([
       this.$el.html(compiledTemplate({aggregates: null, error: this.error, countries: null}));
     }
   });
-  return new doCountriesView;
+  return new aggregateSearchView;
 });
 

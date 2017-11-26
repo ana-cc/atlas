@@ -83,9 +83,23 @@
     <td data-order="<%= aggregate.guard_probability %>"><%= (aggregate.guard_probability * 100).toFixed(4) %>%</td>
     <td data-order="<%= aggregate.middle_probability %>"><%= (aggregate.middle_probability * 100).toFixed(4) %>%</td>
     <td data-order="<%= aggregate.exit_probability %>"><%= (aggregate.exit_probability * 100).toFixed(4) %>%</td>
-    <td><%= aggregate.relays %></td>
-    <td><%= aggregate.guards %></td>
-    <td><%= aggregate.exits %></td>
+    <td>
+      <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %>"><%= aggregate.relays %></a></td>
+    </td>
+    <td>
+      <% if (aggregate.guards > 0) { %>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:guard<% } %>"><%= aggregate.guards %></a></td>
+      <% } else { %>
+        0
+      <% } %>
+    </td>
+    <td>
+      <% if (aggregate.exits > 0) { %>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:exit<% } %>"><%= aggregate.exits %></a></td>
+      <% } else { %>
+        0
+      <% } %>
+    </td>
   </tr>
 <% }); %>
 </tbody>
