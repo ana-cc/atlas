@@ -1,3 +1,11 @@
+<ul class="nav nav-tabs">
+  <li id="main-search-tab" class="search-tabs active"><a onclick="$('.search').hide();$('#main-search-tab-content').fadeIn();$('.search-tabs').removeClass('active');$('#main-search-tab').addClass('active');">Simple Search</a></li>
+  <li id="aggregated-search-tab" class="search-tabs"><a onclick="$('.search').hide();$('#aggregated-search-tab-content').fadeIn();$('.search-tabs').removeClass('active');$('#aggregated-search-tab').addClass('active');">Aggregated Search</a></li>
+</ul>
+
+<div class="tab-content" id="search-tab-content">
+  <div id="main-search-tab-content" class="search tab-pane active">
+
   <p>The relay search tool displays data about single relays and bridges in the
 Tor network. It provides useful information on how relays are configured along
 with graphs about their past.</p>
@@ -7,6 +15,24 @@ with graphs about their past.</p>
       <span class="input-group-btn"><button id="do-search" class="btn btn-primary" type="button">Search</button><button class="btn btn-secondary" type="button" id="do-top-relays">Top Relays</button></span>
     </div>
   </form>
+</div>
+
+  <div id="aggregated-search-tab-content" class="search tab-pane">
+
+  <p>The aggregated search tool displays aggregated data about relays in the
+Tor network. It provides insight into diversity in the network and the
+probabilities of using relays in a particular country or AS as a guard, middle
+or exit relay. The results are restricted to only currently running relays and
+do not include bridge data.</p>
+  <form id="home-aggregate-search">
+    <div class="input-group">
+      <input class="search-query form-control" id="aggregated-query" placeholder="Query" type="text" autocorrect="off" autocapitalize="none">
+      <span class="input-group-btn"><button id="do-aggregate" class="btn btn-primary" type="button">Aggregated Search</button><button class="btn btn-secondary" type="button" id="do-full-aggregation">Entire Network</button></span>
+    </div>
+  </form>
+  </div>
+</div>
+
   <div class="well">
   <p>You can search for Tor relays and bridges by using keywords. In
 particular, this tool enables you to search for (partial) nicknames (e.g.,
@@ -25,3 +51,4 @@ Tor data directory. On Debian systems, this is in <code>/var/lib/tor</code> but
 may be in another location on your system. The location is specified as
 <code>DataDirectory</code> in your <code>torrc</code>.</p>
   </div>
+

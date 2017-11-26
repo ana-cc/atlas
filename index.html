@@ -143,14 +143,15 @@
     <div class="input-group add-on">
       <input class="form-control" placeholder="Search" name="secondary-search-query" id="secondary-search-query" type="text" autocorrect="off" autocapitalize="none">
       <div class="input-group-btn">
-        <button class="btn btn-secondary" id="secondary-search-clear" type="button"><i class="glyphicon glyphicon-remove-circle"></i></span>
-        <button class="btn btn-primary" id="secondary-search-submit" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+        <button class="btn btn-danger" id="secondary-search-clear" type="button" title="Clear Search Query"><i class="glyphicon glyphicon-remove-circle"></i></span>
+        <button class="btn btn-primary" id="secondary-search-submit" type="submit" title="Perform Search"><i class="glyphicon glyphicon-search"></i></button>
+        <button class="btn btn-secondary" id="secondary-search-aggregate" type="button" title="Perform Aggregated Search"><i class="fa fa-compress"></i></button>
       </div>
     </div>
   </form>
   <h1>Relay Search</h1>
   <div class="progress progress-info progress-striped active">
-    <div class="bar"></div>
+    <div class="progress-bar"></div>
   </div>
   <div id="content">
     <noscript>

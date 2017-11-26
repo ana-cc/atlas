@@ -8,7 +8,7 @@ To update these flags:
  * git clone https://github.com/gosquared/flags
  * cd flags; make
  * cp flags/flags-iso/shiny/16/* $RELAYSEARCH/img/cc/
- * cd $RELAYSEARCH/img/cc/; rename 'y/A-Z/a-z/' *.png
+ * cd $RELAYSEARCH/img/cc/; rename 'y/A-Z/a-z/' *.png; cp _unknown.png xz.png
 
 The flags are made available under the MIT license:
 

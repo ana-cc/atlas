@@ -241,6 +241,7 @@ var CountryCodes = {
   "vu" : "Vanuatu",
   "wf" : "Wallis and Futuna",
   "ws" : "Samoa",
+  "xz" : "Unknown",
   "ye" : "Yemen",
   "yt" : "Mayotte",
   "za" : "South Africa",

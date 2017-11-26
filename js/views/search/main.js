@@ -28,6 +28,21 @@ define([
                 document.location = "#search/"+encodeURI($('#query').val());
                 return false;
             });
+
+            $("#do-aggregate").bind('click', function(){
+                document.location = "#aggregate/all/"+encodeURI($('#aggregated-query').val());
+                return false;
+            });
+
+            $("#do-full-aggregation").bind('click', function(){
+                document.location = "#aggregate/all";
+                return false;
+            });
+
+            $("#home-aggregate-search").bind('submit', function(){
+                document.location = "#aggregate/all/"+encodeURI($('#aggregated-query').val());
+                return false;
+            });
 	    }
   });
   return new mainSearchView;

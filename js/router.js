@@ -6,8 +6,9 @@ define([
   'views/details/main',
   'views/search/main',
   'views/search/do',
+  'views/aggregate/search',
   'jssha'
-], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, jsSHA){
+], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aggregateSearchView, jsSHA){
   var AppRouter = Backbone.Router.extend({
     routes: {
        // Define the routes for the actions in Atlas
@@ -17,6 +18,8 @@ define([
     	'search/': 'doSearch',
         'top10': 'showTopRelays',
         'toprelays': 'showTopRelays',
+        'aggregate(/:aType)(/:query)': 'aggregateSearch',
+        'aggregate(/:aType)/': 'emptyAggregateSearch',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -39,7 +42,7 @@ define([
         mainDetailsView.model.fingerprint = this.hashFingerprint(fingerprint);
         mainDetailsView.model.lookup({
             success: function(relay) {
-    	        mainDetailsView.render();
+                mainDetailsView.render();
                 $(".progress").hide();
                 $("#content").show();
                 $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Details for " + relay.get('nickname') + "</li>");
@@ -55,12 +58,63 @@ define([
             }
         });
     },
+    // Empty aggregation query
+    emptyAggregateSearch: function() {
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
+        $("#secondary-search").show();
+        $("#secondary-search-query").val("");
+
+        $("#content").hide();
+        $(".progress").show();
+          doSearchView.error = 5;
+          doSearchView.renderError();
+            $(".progress").hide();
+            $("#content").show();
+
+    },
+    // Perform a countries aggregation
+    aggregateSearch: function(aType, query){
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Aggregated search" + ((query) ? " for " + query : "") + "</li>");
+        $("#secondary-search").show();
+
+        $("#content").hide();
+        $(".progress").show();
+
+        aggregateSearchView.collection.aType = (aType) ? aType : "all";
+
+        if (query) {
+          query = query.trim();
+          $("#secondary-search-query").val(query);
+          aggregateSearchView.collection.url =
+            aggregateSearchView.collection.baseurl + "&search=" + this.hashFingerprint(query);
+        } else {
+          aggregateSearchView.collection.url =
+            aggregateSearchView.collection.baseurl;
+          query = "";
+        }
+        aggregateSearchView.collection.lookup({
+          success: function(err, relaysPublished, bridgesPublished){
+          aggregateSearchView.error = err;
+          aggregateSearchView.relaysPublished = relaysPublished;
+          aggregateSearchView.bridgesPublished = bridgesPublished;
+          aggregateSearchView.render(query);
+          $("#search-title").text("Aggregated results" + ((query) ? " for " + query : ""));
+          $(".progress").hide();
+          $("#content").show();
+        },
+        error: function(err){
+          aggregateSearchView.error = err;
+          aggregateSearchView.renderError();
+          $(".progress").hide();
+          $("#content").show();
+        }
+      });
+    },
 
     // Perform a search on Atlas
     doSearch: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
         $("#secondary-search").show();
-        $("#secondary-search-query").val(query);
 
         $("#content").hide();
         $(".progress").show();
@@ -71,9 +125,11 @@ define([
             $(".progress").hide();
             $("#content").show();
         } else {
-            doSearchView.collection.url =
-                doSearchView.collection.baseurl + this.hashFingerprint(query);
-            doSearchView.collection.lookup({
+          query = query.trim();
+          $("#secondary-search-query").val(query);
+          doSearchView.collection.url =
+              doSearchView.collection.baseurl + this.hashFingerprint(query);
+          doSearchView.collection.lookup({
                 success: function(err, relaysPublished, bridgesPublished){
                     doSearchView.relays = doSearchView.collection.models;
                     // Redirect to the details page when there is exactly one
@@ -150,6 +206,11 @@ define([
 
     $("#secondary-search-submit").bind('click', function(){
       document.location = "#search/"+encodeURI($('#secondary-search-query').val());
+      return false;
+    });
+
+    $("#secondary-search-aggregate").bind('click', function(){
+      document.location = "#aggregate/all/"+encodeURI($('#secondary-search-query').val());
       return false;
     });
 

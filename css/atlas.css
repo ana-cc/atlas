@@ -48,7 +48,7 @@ span.flags {
     background: #ff1515;
 }
 
-#home-search {
+#home-search, #home-aggregate-search {
     padding: 0;
     margin: 0 0 10px 0;
     width: 100%;
