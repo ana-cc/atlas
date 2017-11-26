@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
-  <li id="main-search-tab" class="search-tabs active"><a onclick="$('.search').hide();$('#main-search-tab-content').fadeIn();$('.search-tabs').removeClass('active');$('#main-search-tab').addClass('active');">Simple Search</a></li>
-  <li id="aggregated-search-tab" class="search-tabs"><a onclick="$('.search').hide();$('#aggregated-search-tab-content').fadeIn();$('.search-tabs').removeClass('active');$('#aggregated-search-tab').addClass('active');">Aggregated Search</a></li>
+  <li id="main-search-tab" class="search-tabs active"><a href="#simple">Simple Search</a></li>
+  <li id="aggregated-search-tab" class="search-tabs"><a href="#aggregate">Aggregated Search</a></li>
 </ul>
 
 <div class="tab-content" id="search-tab-content">
@@ -27,7 +27,7 @@ do not include bridge data.</p>
   <form id="home-aggregate-search">
     <div class="input-group">
       <input class="search-query form-control" id="aggregated-query" placeholder="Query" type="text" autocorrect="off" autocapitalize="none">
-      <span class="input-group-btn"><button id="do-aggregate" class="btn btn-primary" type="button">Aggregated Search</button><button class="btn btn-secondary" type="button" id="do-full-aggregation">Entire Network</button></span>
+      <span class="input-group-btn"><button id="do-aggregate" class="btn btn-primary" type="button">Aggregate</button><button class="btn btn-secondary" type="button" id="do-full-aggregation">Entire Network</button></span>
     </div>
   </form>
   </div>

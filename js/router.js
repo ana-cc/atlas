@@ -18,7 +18,7 @@ define([
     	'search/': 'doSearch',
         'top10': 'showTopRelays',
         'toprelays': 'showTopRelays',
-        'aggregate(/:aType)(/:query)': 'aggregateSearch',
+        'aggregate/:aType(/:query)': 'aggregateSearch',
         'aggregate(/:aType)/': 'emptyAggregateSearch',
     	// Default
     	'*actions': 'defaultAction'
@@ -199,6 +199,18 @@ define([
         $("#secondary-search-query").val("");
 
         mainSearchView.render();
+
+        if (actions == "aggregate") {
+          $('.search').hide();
+          $('#aggregated-search-tab-content').fadeIn();
+          $('.search-tabs').removeClass('active');
+          $('#aggregated-search-tab').addClass('active');
+        } else {
+          $('.search').hide();
+          $('#main-search-tab-content').fadeIn();
+          $('.search-tabs').removeClass('active');
+          $('#main-search-tab').addClass('active');
+        }
 
         $(".progress").hide();
         $("#content").show();
