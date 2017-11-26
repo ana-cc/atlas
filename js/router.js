@@ -166,9 +166,9 @@ define([
     showTopRelays: function(){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Top Relays</li>");
 
-        $("#secondary-search").show();
         $("#secondary-search-query").val("");
 
+        $("#secondary-search").hide();
         $("#content").hide();
         $(".progress").show();
 
@@ -181,6 +181,7 @@ define([
 		    $("#search-title").text("Top Relays by Consensus Weight");
                     $(".progress").hide();
                     $("#content").show();
+                    $("#secondary-search").show();
                 },
 
                 error: function(erno){
@@ -188,6 +189,7 @@ define([
                     doSearchView.renderError();
                     $(".progress").hide();
                     $("#content").show();
+                    $("#secondary-search").show();
                 }
             });
     },
