@@ -61,23 +61,24 @@ define([
     // Empty aggregation query
     emptyAggregateSearch: function() {
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Error</li>");
-        $("#secondary-search").show();
         $("#secondary-search-query").val("");
 
+        $("#secondary-search").hide();
         $("#content").hide();
         $(".progress").show();
-          doSearchView.error = 5;
-          doSearchView.renderError();
-            $(".progress").hide();
-            $("#content").show();
+        aggregateSearchView.error = 5;
+        aggregateSearchView.renderError();
+        $(".progress").hide();
+        $("#secondary-search").show();
+        $("#content").show();
 
     },
     // Perform a countries aggregation
     aggregateSearch: function(aType, query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Aggregated search" + ((query) ? " for " + query : "") + "</li>");
-        $("#secondary-search").show();
 
         $("#content").hide();
+        $("#secondary-search").hide();
         $(".progress").show();
 
         aggregateSearchView.collection.aType = (aType) ? aType : "all";
@@ -100,12 +101,14 @@ define([
           aggregateSearchView.render(query);
           $("#search-title").text("Aggregated results" + ((query) ? " for " + query : ""));
           $(".progress").hide();
+          $("#secondary-search").show();
           $("#content").show();
         },
         error: function(err){
           aggregateSearchView.error = err;
           aggregateSearchView.renderError();
           $(".progress").hide();
+          $("#secondary-search").show();
           $("#content").show();
         }
       });
@@ -114,8 +117,8 @@ define([
     // Perform a search on Atlas
     doSearch: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
-        $("#secondary-search").show();
 
+        $("#secondary-search").hide();
         $("#content").hide();
         $(".progress").show();
 
@@ -124,37 +127,40 @@ define([
             doSearchView.renderError();
             $(".progress").hide();
             $("#content").show();
+            $("#secondary-search").show();
         } else {
           query = query.trim();
           $("#secondary-search-query").val(query);
           doSearchView.collection.url =
               doSearchView.collection.baseurl + this.hashFingerprint(query);
           doSearchView.collection.lookup({
-                success: function(err, relaysPublished, bridgesPublished){
-                    doSearchView.relays = doSearchView.collection.models;
-                    // Redirect to the details page when there is exactly one
-                    // search result.
-                    if (doSearchView.relays.length == 1) {
-                        document.location.replace("#details/" +
-                            doSearchView.relays[0].fingerprint);
-                        return;
-                    }
+              success: function(err, relaysPublished, bridgesPublished){
+                  doSearchView.relays = doSearchView.collection.models;
+                  // Redirect to the details page when there is exactly one
+                  // search result.
+                  if (doSearchView.relays.length == 1) {
+                      document.location.replace("#details/" +
+                          doSearchView.relays[0].fingerprint);
+                      return;
+                  }
 		    doSearchView.error = err;
-                    doSearchView.relaysPublished = relaysPublished;
-                    doSearchView.bridgesPublished = bridgesPublished;
-                    doSearchView.render(query);
-		    $("#search-title").text(query);
-                    $(".progress").hide();
-                    $("#content").show();
-                },
+                  doSearchView.relaysPublished = relaysPublished;
+                  doSearchView.bridgesPublished = bridgesPublished;
+                  doSearchView.render(query);
+		  $("#search-title").text(query);
+                  $("#secondary-search").show();
+                  $(".progress").hide();
+                  $("#content").show();
+              },
 
-                error: function(err){
+              error: function(err){
 		    doSearchView.error = err;
 		    doSearchView.renderError();
-                    $(".progress").hide();
-                    $("#content").show();
-                }
-            });
+                  $(".progress").hide();
+                  $("#content").show();
+                  $("#secondary-search").show();
+              }
+          });
         }
     },
     showTopRelays: function(){

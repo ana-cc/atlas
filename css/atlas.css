@@ -4,8 +4,8 @@
     display: none;
 }
 
-.progress .bar {
-    width: 50%;
+.progress-bar {
+    width: 100%;
 }
 
 a.alleged {
