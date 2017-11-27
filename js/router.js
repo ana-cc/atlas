@@ -7,8 +7,9 @@ define([
   'views/search/main',
   'views/search/do',
   'views/aggregate/search',
+  'views/aggregate/map',
   'jssha'
-], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aggregateSearchView, jsSHA){
+], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aggregateSearchView, aggregateMapView, jsSHA){
   var AppRouter = Backbone.Router.extend({
     routes: {
        // Define the routes for the actions in Atlas
@@ -20,6 +21,7 @@ define([
         'toprelays': 'showTopRelays',
         'aggregate/:aType(/:query)': 'aggregateSearch',
         'aggregate(/:aType)/': 'emptyAggregateSearch',
+        'map(/:query)': 'aggregateMap',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -73,7 +75,7 @@ define([
         $("#content").show();
 
     },
-    // Perform a countries aggregation
+    // Perform an aggregate search
     aggregateSearch: function(aType, query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Aggregated search" + ((query) ? " for " + query : "") + "</li>");
 
@@ -113,7 +115,47 @@ define([
         }
       });
     },
+    // Perform an aggregate search
+    aggregateMap: function(aType, query){
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Map view" + ((query) ? " for " + query : "") + "</li>");
 
+        $("#content").hide();
+        $("#secondary-search").hide();
+        $(".progress").show();
+
+        aggregateMapView.collection.aType = "cc";
+        aggregateMapView.aggregationType = "consensus_weight_fraction";
+
+        if (query) {
+          query = query.trim();
+          $("#secondary-search-query").val(query);
+          aggregateMapView.collection.url =
+            aggregateMapView.collection.baseurl + "&search=" + this.hashFingerprint(query);
+        } else {
+          aggregateMapView.collection.url =
+            aggregateMapView.collection.baseurl;
+          query = "";
+        }
+        aggregateMapView.collection.lookup({
+          success: function(err, relaysPublished, bridgesPublished){
+          aggregateMapView.error = err;
+          aggregateMapView.relaysPublished = relaysPublished;
+          aggregateMapView.bridgesPublished = bridgesPublished;
+          aggregateMapView.render(query);
+          $("#search-title").text("Map view" + ((query) ? " for " + query : ""));
+          $(".progress").hide();
+          $("#secondary-search").show();
+          $("#content").show();
+        },
+        error: function(err){
+          aggregateMapView.error = err;
+          aggregateMapView.renderError();
+          $(".progress").hide();
+          $("#secondary-search").show();
+          $("#content").show();
+        }
+      });
+    },
     // Perform a search on Atlas
     doSearch: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
