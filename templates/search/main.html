@@ -1,6 +1,7 @@
 <ul class="nav nav-tabs">
   <li id="main-search-tab" class="search-tabs active"><a href="#simple">Simple Search</a></li>
   <li id="aggregated-search-tab" class="search-tabs"><a href="#aggregate">Aggregated Search</a></li>
+  <li id="advanced-search-tab" class="search-tabs"><a href="#advanced">Advanced Search</a></li>
 </ul>
 
 <div class="tab-content" id="search-tab-content">
@@ -30,6 +31,93 @@ do not include bridge data.</p>
       <span class="input-group-btn"><button id="do-aggregate" class="btn btn-primary" type="button">Aggregate</button><button class="btn btn-secondary" type="button" id="do-full-aggregation">Entire Network</button></span>
     </div>
   </form>
+  </div>
+</div>
+
+<div id="advanced-search-tab-content" class="search tab-pane">
+
+  <p>The advanced search tool allows you to build advanced queries to search
+for data about single relays and bridges in the Tor network or aggregated data about currently running relays. For single relays, it provides useful
+information on how relays are configured along with graphs about their
+past. Aggregated data provides insight into diversity in the network and the
+probabilities of using relays in a particular country or AS as a guard, middle
+or exit relay filtered by the search parameters.</p>
+<div class="panel panel-default"><div class="panel-body">
+  <form id="home-advanced-search">
+    <div class="form-group">
+      <label for="advanced-search-nickname">Nickname:</label>
+      <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-nickname">
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-fingerprint">Fingerprint:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" autocorrect="off" autocapitalize="off" id="advanced-search-fingerprint">
+        <span class="input-group-addon"><input type="checkbox" id="advanced-search-family"> Include Family</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-nickname">Contact:</label>
+      <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-contact">
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-flag">Flag:</label>
+      <select class="form-control" id="advanced-search-flag">
+        <option value="">Any</option>
+        <option value="stable">Stable</option>
+        <option value="running">Running</option>
+        <option value="fast">Fast</option>
+        <option value="guard">Guard</option>
+        <option value="exit">Exit</option>
+        <option value="authority">Authority</option>
+        <option value="noedconsensus">NoEdConsensus</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-country">Country:</label>
+      <select class="form-control" id="advanced-search-country">
+        <option value="">Any</option>
+        <% var knownCountries = Object.keys(countries); knownCountries.sort(); %>
+        <% _.each(knownCountries, function(country){ %>
+          <option value="<%= country %>"><%= country %> - <%= countries[country] %></option>
+        <% }); %>
+      </select>
+    </div>
+     <div class="form-group">
+      <label for="advanced-search-as">Autonomous System:</label>
+      <div class="input-group">
+        <span class="input-group-addon">AS</span>
+        <input type="text" id="advanced-search-as" class="search-query form-control">
+      </div>
+     </div>
+    <div class="form-group">
+      <label for="advanced-search-nickname">Hostname:</label>
+      <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-hostname">
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-flag">Type<sup>&dagger;</sup>:</label>
+      <select class="form-control" id="advanced-search-type">
+        <option value="">Any</option>
+        <option value="relay">Only Relays</option>
+        <option value="bridge">Only Bridges</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-flag">Running<sup>&dagger;</sup>:</label>
+      <select class="form-control" id="advanced-search-running">
+        <option value="">Any</option>
+        <option value="true">Only Running Relays</option>
+        <option value="false">Only Offline Relays</option>
+      </select>
+    </div>
+    <p><button id="do-advanced" class="btn btn-primary" type="button">Advanced Search</button></p>
+    <p>
+      <button id="do-advanced-aggregation" class="btn btn-primary" type="button">Advanced Aggregation</button>
+      <button id="do-advanced-aggregation-cc" class="btn btn-secondary tip" type="button" title="Aggregate by Country">by CC</button>
+      <button id="do-advanced-aggregation-as" class="btn btn-secondary tip" type="button" title="Aggregate by Autonomous System">by AS</button>
+    </p>
+  </form>
+  <p><sup>&dagger;</sup> These options are ignored when performing an aggregation as the aggregated searches are restricted to only currently running relays.</p>
+</div></div><!-- /panel -->
   </div>
 </div>
 

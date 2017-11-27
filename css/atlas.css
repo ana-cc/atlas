@@ -52,22 +52,18 @@ span.flags {
     background: #ff1515;
 }
 
-#home-search, #home-aggregate-search {
+#home-search, #home-aggregate-search, #home-advanced-search {
     padding: 0;
     margin: 0 0 10px 0;
     width: 100%;
-}
-
-.search-query {
-    max-width: none;
 }
 
 td, th {
     padding: 2px!important;
 }
 
-table input {
-    width: 100%;
+.form-control {
+    max-width: none !important;
 }
 
 .flags-cell {

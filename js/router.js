@@ -207,6 +207,12 @@ define([
           $('#aggregated-search-tab-content').fadeIn();
           $('.search-tabs').removeClass('active');
           $('#aggregated-search-tab').addClass('active');
+        } else if (actions == "advanced") {
+          $('.search').hide();
+          $('#advanced-search-tab-content').fadeIn();
+          $('.search-tabs').removeClass('active');
+          $('#advanced-search-tab').addClass('active');
+          $('.well').hide();
         } else {
           $('.search').hide();
           $('#main-search-tab-content').fadeIn();
