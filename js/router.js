@@ -116,7 +116,7 @@ define([
       });
     },
     // Perform an aggregate search
-    aggregateMap: function(aType, query){
+    aggregateMap: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Map view" + ((query) ? " for " + query : "") + "</li>");
 
         $("#content").hide();
@@ -124,7 +124,7 @@ define([
         $(".progress").show();
 
         aggregateMapView.collection.aType = "cc";
-        aggregateMapView.aggregationType = "consensus_weight_fraction";
+        aggregateMapView.aggregateType = "consensus_weight_fraction";
 
         if (query) {
           query = query.trim();
