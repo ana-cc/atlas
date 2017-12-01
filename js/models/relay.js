@@ -201,7 +201,7 @@ define([
                         relay.or_addresses = new_addresses;
                     }
                     relay.or_address = relay.or_addresses ? relay.or_addresses[0].split(":")[0] : null;
-                    relay.or_v6_addresses = $.grep(relay.or_addresses, function(n, i) { return n.startsWith("["); });
+                    relay.or_v6_addresses = $.grep(relay.or_addresses, function(n, i) { return n.indexOf("[") == 0; });
                     relay.or_port = relay.or_addresses ? relay.or_addresses[0].split(":")[1] : 0;
                     relay.dir_port = relay.dir_address ? relay.dir_address.split(":")[1] : 0;
                     relay.exit_addresses = relay.exit_addresses ? relay.exit_addresses : null;

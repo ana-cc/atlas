@@ -87,15 +87,26 @@ define([
           error(0);
           return false;
         }
-        _.each(Object.values(aggregates), function(aggregate) {
+        var aggregatesArr = [];
+        _.each(Object.keys(aggregates), function(aggregateKey) {
+          var aggregate = aggregates[aggregateKey];
           if ((typeof aggregate.as) !== "string") {
-            if (aggregate.as.size == 1) aggregate.as = Array.from(aggregate.as.values())[0];
+            if (aggregate.as.size == 1) {
+              aggregate.as.forEach(function(value1, value2, set) {
+                aggregate.as = value1;
+              });
+            }
           }
           if ((typeof aggregate.country) !== "string") {
-            if (aggregate.country.size == 1) aggregate.country = Array.from(aggregate.country.values())[0];
+            if (aggregate.country.size == 1) {
+              aggregate.country.forEach(function(value1, value2, set) {
+                aggregate.country = value1;
+              });
+            }
           }
+          aggregatesArr.push(aggregate);
         });
-        collection[options.add ? 'add' : 'reset'](Object.values(aggregates), options);
+        collection[options.add ? 'add' : 'reset'](aggregatesArr, options);
         success(err, relaysPublished, bridgesPublished);
       }).fail(function(jqXHR, textStatus, errorThrown) {
         if(jqXHR.statusText == "error") {
