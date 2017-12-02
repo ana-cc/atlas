@@ -18,6 +18,8 @@ define([
       this.collection = new aggregatesCollection;
     },
     plot: function() {
+      $('input[name="aggregate-property"]').prop('disabled', true);
+
       var aggregate_property = $('input[name="aggregate-property"]:checked').val();
       var aggregates = this.collection.models;
 
@@ -32,9 +34,8 @@ define([
       var path = d3.geo.path()
         .projection(projection);
 
-      $("#aggregate-map").html("");
-
-      var svg = d3.select("#aggregate-map").append("svg")
+      var svg = d3.select("body").append("svg")
+        .remove()
         .attr("preserveAspectRatio", "xMidYMid")
         .attr("viewBox", "0 0 " + width + " " + height)
 
@@ -116,6 +117,10 @@ define([
           .text("" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%");
       }
 
+      $("#aggregate-map").html("");
+      document.getElementById("aggregate-map").appendChild(svg.node());
+
+      $('input[name="aggregate-property"]').prop('disabled', false);
      });
     },
     save: function() {
