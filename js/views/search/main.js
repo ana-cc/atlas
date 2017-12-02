@@ -60,27 +60,40 @@ define([
               if($('#advanced-search-hostname').val().trim() != "") query += "host_name:" + $('#advanced-search-hostname').val().trim().split(" ")[0] + " ";
               if($('#advanced-search-type').val() !== "") query += "type:" + $('#advanced-search-type').val() + " ";
               if($('#advanced-search-running').val() !== "") query += "running:" + $('#advanced-search-running').val() + " ";
+              if($('#advanced-search-first-seen-from').val() !== "0" || $('#advanced-search-first-seen-to').val() !== "0") query += "first_seen_days:" + $('#advanced-search-first-seen-from').val() + "-" + $('#advanced-search-first-seen-to').val() + " ";
+              if($('#advanced-search-last-seen-from').val() !== "0" || $('#advanced-search-last-seen-to').val() !== "0") query += "last_seen_days:" + $('#advanced-search-last-seen-from').val() + "-" + $('#advanced-search-last-seen-to').val() + " ";
+              if($('#advanced-search-version').val().trim() != "") query += "version:" + $('#advanced-search-version').val().trim().split(" ")[0] + " ";
               return query;
             }
 
             $("#do-advanced").bind('click', function(){
                 var query = buildAdvancedQuery();
                 document.location = "#search/"+encodeURI(query);
+                return false;
             });
 
             $("#do-advanced-aggregation").bind('click', function(){
                 var query = buildAdvancedQuery();
                 document.location = "#aggregate/all/"+encodeURI(query);
+                return false;
             });
 
             $("#do-advanced-aggregation-cc").bind('click', function(){
                 var query = buildAdvancedQuery();
                 document.location = "#aggregate/cc/"+encodeURI(query);
+                return false;
             });
 
             $("#do-advanced-aggregation-as").bind('click', function(){
                 var query = buildAdvancedQuery();
                 document.location = "#aggregate/as/"+encodeURI(query);
+                return false;
+            });
+
+            $("#home-advanced-search").bind('submit', function(){
+                var query = buildAdvancedQuery();
+                document.location = "#search/"+encodeURI(query);
+                return false;
             });
 
             $(".tip").tooltip();

@@ -44,6 +44,8 @@ probabilities of using relays in a particular country or AS as a guard, middle
 or exit relay filtered by the search parameters.</p>
 <div class="panel panel-default"><div class="panel-body">
   <form id="home-advanced-search">
+    <div class="row">
+    <div class="col-md-6">
     <div class="form-group">
       <label for="advanced-search-nickname">Nickname:</label>
       <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-nickname">
@@ -89,9 +91,23 @@ or exit relay filtered by the search parameters.</p>
         <input type="text" id="advanced-search-as" class="search-query form-control">
       </div>
      </div>
+    </div><!-- col-md-6 -->
+    <div class="col-md-6">
     <div class="form-group">
-      <label for="advanced-search-nickname">Hostname:</label>
+      <label for="advanced-search-hostname">Hostname:</label>
       <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-hostname">
+    </div>
+    <div class="form-group">
+      <label>First Seen:</label><br>
+      From <input type="number" id="advanced-search-first-seen-from" class="form-control day-spinner" value="0"> to <input type="number" id="advanced-search-first-seen-to" class="form-control day-spinner" value="0"> days ago
+    </div>
+    <div class="form-group">
+      <label>Last Seen:</label><br>
+      From <input type="number" id="advanced-search-last-seen-from" class="form-control day-spinner" value="0"> to <input type="number" id="advanced-search-last-seen-to" class="form-control day-spinner" value="0"> days ago
+    </div>
+    <div class="form-group">
+      <label for="advanced-search-version">Version:</label>
+      <input type="text" class="form-control search-query" autocorrect="off" autocapitalize="off" id="advanced-search-version">
     </div>
     <div class="form-group">
       <label for="advanced-search-flag">Type<sup>&dagger;</sup>:</label>
@@ -109,7 +125,9 @@ or exit relay filtered by the search parameters.</p>
         <option value="false">Only Offline Relays</option>
       </select>
     </div>
-    <p><button id="do-advanced" class="btn btn-primary" type="button">Advanced Search</button></p>
+    </div><!-- col-md-6 -->
+    </div><!-- row -->
+    <p><button id="do-advanced" class="btn btn-primary" type="submit">Advanced Search</button></p>
     <p>
       <button id="do-advanced-aggregation" class="btn btn-primary" type="button">Advanced Aggregation</button>
       <button id="do-advanced-aggregation-cc" class="btn btn-secondary tip" type="button" title="Aggregate by Country">by CC</button>
