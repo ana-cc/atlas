@@ -9,7 +9,7 @@
     <p><a href="#">Return to home page</a></p>
     </div>
     <% } else if (error == 2) { %>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
         <strong>Backend error!</strong>
         <p>Relay Search is unable to get a response from its backend server. This
         probably means that the backend server is unavailable right now. This
@@ -18,7 +18,7 @@
         what type of search queries are supported by Relay Search.</p>
     </div>
     <% } else if (error == 3) { %>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
 	<strong>JavaScript Error!</strong><p>There is a problem with your
 	javascript environment, you may have noscript enabled on the remote
 	onionoo backend. Try temporarily allowing noscript to connect to the
@@ -26,7 +26,7 @@
 		href="https://trac.torproject.org/">the bugtracker.</a></p>
     </div>
     <% } else if (error == 5) { %>
-    <div class="alert alert-error">
+    <div class="alert alert-warning">
         <strong>No query submitted!</strong>
         <p>The search query was found to be empty, which is not supported. You
         must enter a search query in order to generate results. Please have a
