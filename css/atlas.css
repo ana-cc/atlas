@@ -52,7 +52,7 @@ span.flags {
     background: #ff1515;
 }
 
-#home-search, #home-aggregate-search, #home-advanced-search {
+#home-search, #home-aggregate-search, #home-advanced-search, #map-radio-buttons {
     padding: 0;
     margin: 0 0 10px 0;
     width: 100%;
@@ -92,3 +92,9 @@ td a {
     width: 120px;
     display: inline;
 }
+
+label.radio-inline {
+    display: inline !important;
+    width: auto;
+}
+

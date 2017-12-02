@@ -17,17 +17,8 @@ define([
     initialize: function() {
       this.collection = new aggregatesCollection;
     },
-    render: function(query){
-      document.title = "Relay Search";
-      var compiledTemplate = _.template(aggregateMapTemplate)
-      this.$el.html(compiledTemplate({query: query,
-                                     aggregates: this.collection.models,
-                                     countries: CountryCodes,
-                                     error: this.error,
-                                     relaysPublished: this.relaysPublished,
-                                     bridgesPublished: this.bridgesPublished}));
-
-      var aggregate_type = this.aggregateType;
+    plot: function() {
+      var aggregate_property = $('input[name="aggregate-property"]:checked').val();
       var aggregates = this.collection.models;
 
       var m_width = $("#container").width();
@@ -41,11 +32,11 @@ define([
       var path = d3.geo.path()
         .projection(projection);
 
+      $("#aggregate-map").html("");
+
       var svg = d3.select("#aggregate-map").append("svg")
         .attr("preserveAspectRatio", "xMidYMid")
         .attr("viewBox", "0 0 " + width + " " + height)
-        .attr("width", m_width)
-        .attr("height", m_width * height / width);
 
       svg.append("rect")
         .attr("class", "background")
@@ -58,13 +49,13 @@ define([
 
       var maximum_value = 0;
       _.each(aggregates, function(aggregate) {
-        if (aggregate[aggregate_type] > maximum_value) maximum_value = aggregate[aggregate_type];
+        if (aggregate[aggregate_property] > maximum_value) maximum_value = aggregate[aggregate_property];
       });
 
-      var getCountryAggregate = function(code, aggregate_type) {
+      var getCountryAggregate = function(code, aggregate_property) {
         var found = 0;
         _.each(aggregates, function(aggregate) {
-          if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_type];
+          if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
         });
 
         return (found == 0) ? found : Math.sqrt(found/maximum_value);
@@ -94,7 +85,7 @@ define([
         .enter()
           .append("path")
             .attr("id", function(d) { return d.id; })
-            .style("fill-opacity", function(d) { return getCountryAggregate(d.id, aggregate_type); })
+            .style("fill-opacity", function(d) { return getCountryAggregate(d.id, aggregate_property); })
             .attr("d", path)
           .append("svg:title")
             .text( function(d) { return d.id; });
@@ -125,13 +116,35 @@ define([
           .text("" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%");
       }
 
+     });
+    },
+    save: function() {
       /* Encode SVG image for download link. */
       html = d3.select("#aggregate-map")
         .node()
         .innerHTML;
-      d3.select("#save_svg")
-        .attr("href", "data:image/svg+xml;base64," + btoa(html));
-     });
+      window.open("data:image/svg+xml;base64," + btoa(html), "SaveSVG");
+    },
+    render: function(query){
+      document.title = "Relay Search";
+      var compiledTemplate = _.template(aggregateMapTemplate)
+      this.$el.html(compiledTemplate({query: query,
+                                     aggregates: this.collection.models,
+                                     countries: CountryCodes,
+                                     error: this.error,
+                                     relaysPublished: this.relaysPublished,
+                                     bridgesPublished: this.bridgesPublished}));
+
+      this.plot();
+
+      var thisView = this;
+
+      $('input[name="aggregate-property"]').bind('change', function(){
+        thisView.plot();
+      });
+      $('#save_svg').bind('click', function(){
+        thisView.save();
+      });
     },
     renderError: function(){
       var compiledTemplate = _.template(aggregateSearchTemplate);

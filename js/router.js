@@ -124,7 +124,6 @@ define([
         $(".progress").show();
 
         aggregateMapView.collection.aType = "cc";
-        aggregateMapView.aggregateType = "consensus_weight_fraction";
 
         if (query) {
           query = query.trim();
