@@ -140,16 +140,19 @@ define([
                                      relaysPublished: this.relaysPublished,
                                      bridgesPublished: this.bridgesPublished}));
 
-      this.plot();
-
-      var thisView = this;
-
-      $('input[name="aggregate-property"]').bind('change', function(){
-        thisView.plot();
-      });
-      $('#save_svg').bind('click', function(){
-        thisView.save();
-      });
+      canSvg = !!(document.createElementNS && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect);
+      if (canSvg) {
+        this.plot();
+        var thisView = this;
+        $('input[name="aggregate-property"]').bind('change', function(){
+          thisView.plot();
+        });
+        $('#save_svg').bind('click', function(){
+          thisView.save();
+        });
+      } else {
+        $('#no-svg').show();
+      }
     },
     renderError: function(){
       var compiledTemplate = _.template(aggregateSearchTemplate);

@@ -98,3 +98,6 @@ label.radio-inline {
     width: auto;
 }
 
+#no-svg {
+    display: none;
+}

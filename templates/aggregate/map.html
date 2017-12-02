@@ -35,7 +35,15 @@
     </div>
     <% } %>
 <% } else { %>
-   <div id="aggregate-map"></div>
+   <div id="aggregate-map">
+    <div class="alert alert-danger" id="no-svg">
+        <strong>SVG Not Supported!</strong>
+        <p>Your browser does not support Scalable Vector Graphics. This support
+        is required in order to produce the map view. If you are using Tor
+        Browser on high-security mode, you will need to use either medium- or
+        low-security mode instead to view the map.</p>
+    </div>
+   </div>
    <div class="panel panel-default">
    <div class="panel-body">
    <form id="map-radio-buttons">
