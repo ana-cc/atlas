@@ -17,7 +17,7 @@ require.config({
     bootstrap: 'libs/bootstrap/bootstrap.min',
     datatablesbs: 'libs/datatables/dataTables.bootstrap',
     d3js: 'libs/d3js/d3.v3.min',
-    topojson: 'https://d3js.org/topojson.v1.min',
+    topojson: 'libs/d3js/topojson.v1.min',
     jssha: 'libs/jssha/sha1',
     templates: '../templates',
     fallbackdir: 'fallback_dir'
