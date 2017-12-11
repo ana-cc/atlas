@@ -17,10 +17,10 @@
     <div class="col-md-6">
     <h3>Configuration</h3>
     <dl>
-      <dt><span class="tip" title="This is the nickname that the Tor relay operator chose.">Nickname</span></dt>
+      <dt><span class="tip" title="This is the nickname that the Tor relay operator chose.">Nickname</span> <a href="#search/<%= _.escape(relay.get('nickname')) %>"><i class="fa fa-search"></i></a></dt>
       <dd><%= _.escape(relay.get('nickname')) %></dd>
 
-      <dt><span class="tip" title="Addresses and ports where the relay listens for incoming connections from clients and other relays.">OR Addresses</span></dt>
+      <dt><span class="tip" title="Addresses and ports where the relay listens for incoming connections from clients and other relays.">OR Addresses</span> <a href="#search/<%= relay.get('or_addresses')[0].split(":")[0] %>"><i class="fa fa-search"></i></a></dt>
       <dd><%= relay.get('or_addresses') %></dd>
 
       <dt><span class="tip" title="These are the contact details of the Tor relay operator">Contact</span></dt>
