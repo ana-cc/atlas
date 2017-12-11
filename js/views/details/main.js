@@ -237,7 +237,10 @@ define([
               $("#history-tab-content").html("Graphs cannot be shown as your browser does not support Scalable Vector Graphics (SVG). This is the case when Tor Browser is in High Security mode.");
             }
 
-            $(".tip").tooltip({ placement: 'right' });
+            $(".tip").tooltip({
+              placement: 'right',
+              html: true
+            });
         },
         error: function() {
             var compiledTemplate = _.template(errorDetailsTemplate);
