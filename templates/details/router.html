@@ -24,7 +24,7 @@
       <dd><%= relay.get('or_addresses') %></dd>
 
       <dt><span class="tip" title="These are the contact details of the Tor relay operator">Contact</span></dt>
-      <dd><%= _.escape( relay.get('contact')!='undefined' ? relay.get('contact') : 'none' ) %></dd>
+      <dd><%= _.escape( relay.get('contact')!='undefined' ? _.escape(relay.get('contact')) : 'none' ) %></dd>
 
       <dt><span class="tip" title="Address and port where the relay listens for directory requests.">Dir Address</span></dt>
       <dd><%= relay.get('dir_address') ? relay.get('dir_address') : 'none' %></dd>
