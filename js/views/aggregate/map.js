@@ -4,6 +4,9 @@ define([
   'underscore',
   'backbone',
   'topojson',
+  'd3-array',
+  'd3-geo',
+  'd3-geo-projection',
   'collections/aggregates',
   'text!templates/aggregate/map.html',
   'datatables',
@@ -11,7 +14,7 @@ define([
   'helpers',
   'bootstrap',
   'datatablesbs'
-], function($, _, Backbone, topojson, aggregatesCollection, aggregateMapTemplate){
+], function($, _, Backbone, topojson, d3array, d3geo, d3geoproj, aggregatesCollection, aggregateMapTemplate){
   var aggregateSearchView = Backbone.View.extend({
     el: "#content",
     initialize: function() {
@@ -27,9 +30,7 @@ define([
       var width = 938;
       var height = 500;
 
-      var projection = d3.geo.mercator()
-        .scale(800)
-        .translate([width / 2, height / 1.5]);
+      var projection = d3geoproj.geoCylindricalEqualArea();
 
       var path = d3.geo.path()
         .projection(projection);
