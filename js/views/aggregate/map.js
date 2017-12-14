@@ -129,7 +129,7 @@ define([
       html = d3.select("#aggregate-map")
         .node()
         .innerHTML;
-      window.open("data:image/svg+xml;base64," + btoa(html), "SaveSVG");
+      window.open("data:data/xml;base64," + btoa(html), "SaveSVG");
     },
     render: function(query){
       document.title = "Relay Search";
