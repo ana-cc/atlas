@@ -72,22 +72,26 @@ define([
                 return false;
             });
 
-            $("#do-advanced-aggregation").bind('click', function(){
+            var goAggregate = function(type) {
                 var query = buildAdvancedQuery();
-                document.location = "#aggregate/all/"+encodeURI(query);
+                document.location = "#aggregate/" + type + ((query) ? "/" + encodeURI(query) : "");
                 return false;
+            }
+
+            $("#do-advanced-aggregation").bind('click', function(){
+                return goAggregate("all")
             });
 
             $("#do-advanced-aggregation-cc").bind('click', function(){
-                var query = buildAdvancedQuery();
-                document.location = "#aggregate/cc/"+encodeURI(query);
-                return false;
+                return goAggregate("cc")
             });
 
             $("#do-advanced-aggregation-as").bind('click', function(){
-                var query = buildAdvancedQuery();
-                document.location = "#aggregate/as/"+encodeURI(query);
-                return false;
+                return goAggregate("as")
+            });
+
+            $("#do-advanced-aggregation-ascc").bind('click', function(){
+                return goAggregate("ascc")
             });
 
             $("#home-advanced-search").bind('submit', function(){
