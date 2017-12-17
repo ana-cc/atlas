@@ -10,49 +10,43 @@ define([
 	var relayModel = Backbone.Model.extend({
         baseurl: 'https://onionoo.torproject.org',
         fingerprint: '',
-        parseflags: function(flags, size) {
+        parseflags: function(flags) {
             var output = [];
             var model = this;
             _.each(flags, function(flag) {
                 if (flag == "Authority") {
-                    output.push([flag,"award_stroke_"+size[2], "This relay is a directory authority."]);
+                    output.push([flag, "authority", "This relay is a directory authority."]);
                 }
                 if (flag == "BadExit") {
                     model.set({badexit: true});
-                    output.push([flag, "denied_"+size[0], "This relay is believed to be useless as an exit node (because its ISP censors it, because it is behind a restrictive proxy, or for some similar reason)."]);
+                    output.push([flag, "badexit", "This relay is believed to be useless as an exit node (because its ISP censors it, because it is behind a restrictive proxy, or for some similar reason)."]);
                 }
                 if (flag == "Fast") {
-                    output.push([flag,"bolt_"+size[0], "This relay is suitable for high-bandwidth circuits."]);
+                    output.push([flag, "fast", "This relay is suitable for high-bandwidth circuits."]);
                 }
                 if (flag == "Guard") {
-                    output.push([flag,"share_"+size[0], "This relay is suitable for use as an entry guard."]);
+                    output.push([flag, "guard", "This relay is suitable for use as an entry guard."]);
                 }
                 if (flag == "HSDir") {
-                    output.push([flag,"book_alt_"+size[0], "This relay is considered a v2 hidden service directory."]);
-                }
-                if (flag == "Named") {
-                    output.push([flag,"info_"+size[2], "This relay's identity-nickname mapping is canonical, and this authority binds names."]);
+                    output.push([flag, "hsdir", "This relay is considered a v2 hidden service directory."]);
                 }
                 if (flag == "NoEdConsensus") {
-                    output.push([flag,"question_mark_"+size[2], "An Ed25519 key in the relay's descriptor or microdesriptor does not reflect authority consensus."]);
+                    output.push([flag, "noedconensus", "An Ed25519 key in the relay's descriptor or microdesriptor does not reflect authority consensus."]);
                 }
                 if (flag == "Running") {
-                    output.push([flag,"fork_"+size[1], "This relay is currently usable."]);
+                    output.push([flag, "running", "This relay is currently usable."]);
                 }
                 if (flag == "Stable") {
-                    output.push([flag,"cd_"+size[0], "This relay is suitable for long-lived circuits."]);
+                    output.push([flag, "stable", "This relay is suitable for long-lived circuits."]);
                 }
                 if (flag == "V2Dir") {
-                    output.push([flag,"book_"+size[1], "This relay implements the v2 directory protocol or higher."]);
+                    output.push([flag, "v2dir-alt", "This relay implements the v2 directory protocol or higher."]);
                 }
                 if (flag == "Valid") {
-                    output.push([flag,"check_alt_"+size[0], "This relay has been 'validated'."]);
-                }
-                if (flag == "Unnamed") {
-                    output.push([flag,"question_mark_"+size[2], "Another relay has bound the name used by this relay, and this authority binds names."]);
+                    output.push([flag, "valid", "This relay has been 'validated'."]);
                 }
                 if (flag == "Exit") {
-                    output.push([flag,"cloud_download_"+size[0], "This relay is more useful for building general-purpose exit circuits than for relay circuits."]);
+                    output.push([flag, "exit", "This relay is more useful for building general-purpose exit circuits than for relay circuits."]);
                 }
             });
             return output;
@@ -62,19 +56,19 @@ define([
             var model = this;
             _.each(flags, function(flag) {
                 if (flag == "Not Recommended") {
-                    output.push([flag,"not_recommended_16x16", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."]);
+                    output.push([flag,"notrecommended", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."]);
                 }
                 if (flag == "Unmeasured") {
-                    output.push([flag,"unmeasured_16x16", "This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays."]);
+                    output.push([flag,"unmeasured", "This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays."]);
                 }
                 if (flag == "FallbackDir") {
-                    output.push([flag,"fallbackdir_16x16", "Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports."]);
+                    output.push([flag,"fallbackdir", "Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports."]);
                 }
-                if (flag == "IPv6 ORPort") {
-                    output.push([flag,"ipv6_or_16x16", "This relay accepts OR connections using IPv6."]);
+                if (flag == "ReachableIPv6") {
+                    output.push([flag,"reachableipv6", "This relay accepts OR connections using IPv6."]);
                 }
                 if (flag == "IPv6 Exit") {
-                    output.push([flag,"ipv6_exit_16x16", "This relay allows exit connections using IPv6."]);
+                    output.push([flag, "ipv6exit", "This relay allows exit connections using IPv6."]);
                 }
             });
             return output;
@@ -223,15 +217,14 @@ define([
                     relay.transports = relay.transports ? relay.transports : null;
                     relay.fingerprint = relay.hashed_fingerprint ? relay.hashed_fingerprint : relay.fingerprint;
                     model.set({badexit: false});
-                    var size = ['16x16', '14x16', '8x16'];
-                    relay.flags = model.parseflags(relay.flags, size);
+                    relay.flags = model.parseflags(relay.flags);
 
                     /* Synthetic Additional Flags */
                     var additional_flags = []
                     if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true)) additional_flags.push("Not Recommended");
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
-                    if (relay.or_v6_addresses.length > 0) additional_flags.push("IPv6 ORPort");
+                    if (relay.or_v6_addresses.length > 0) additional_flags.push("ReachableIPv6");
                     if (relay.exit_policy_v6_summary !== null) additional_flags.push("IPv6 Exit");
 
                     relay.additional_flags = model.parseadditionalflags(additional_flags);

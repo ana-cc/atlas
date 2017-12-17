@@ -104,7 +104,7 @@
             <% _.each(relay.get('flags'), function(flag) { %><img class="tip flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>
             <td>
-            <% _.each(relay.get('additional_flags'), function(flag) { %><img class="tip flags" src="img/properties/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
+            <% _.each(relay.get('additional_flags'), function(flag) { %><img class="tip flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>
 			<td><%= relay.get('or_port') %></td>
 			<td><%= relay.get('dir_port') %></td>
