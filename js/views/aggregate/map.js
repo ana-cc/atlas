@@ -112,7 +112,6 @@ define([
         svg.append("text")
           .attr("x", 30)
           .attr("y", height-(i*5+0.5)*20 )
-          .style("font-family", "Helvetica")
           .style("font-size", "12px")
           .style("fill", "#484848")
           .text("" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%");

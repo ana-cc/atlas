@@ -66,7 +66,6 @@ define([
             xAxisContainer.selectAll("minor")
                 .style("stroke-opacity", .5);
             xAxisContainer.selectAll("text")
-                .style("font-family", "Helvetica")
                 .style("font-size", "12px");
 
             /* Add the y axis. */
@@ -86,7 +85,6 @@ define([
             yAxisContainer.selectAll("minor")
                 .style("stroke-opacity", .5);
             yAxisContainer.selectAll("text")
-                .style("font-family", "Helvetica")
                 .style("font-size", "12px");
 
             /* Add one group per data line. */
@@ -150,7 +148,6 @@ define([
                         .attr("x", legendPos[i][0] - margin.left + 15)
                         .attr("y", legendPos[i][1] - margin.top + 14)
                         .style("fill", colors[i])
-                        .style("font-family", "Helvetica")
                         .style("font-size", "12px")
                         .text(labels[i]);
                 });
