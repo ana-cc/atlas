@@ -65,7 +65,13 @@ define([
                     output.push([flag,"fallbackdir", "Tor clients contact fallback directory mirrors during bootstrap, and download the consensus and authority certificates from them. We include a default list of mirrors in the Tor source code. These default mirrors need to be long-term stable, and on the same IPv4 and IPv6 addresses and ports."]);
                 }
                 if (flag == "ReachableIPv6") {
-                    output.push([flag,"reachableipv6", "This relay accepts OR connections using IPv6."]);
+                    output.push([flag,"reachableipv6", "This relay claims to accept OR connections using IPv6 and the directory authorities have confirmed it is reachable."]);
+                }
+                if (flag == "UnreachableIPv6") {
+                    output.push([flag,"unreachableipv6", "This relay claims to accept OR connections using IPv6 but the directory authorities failed to confirm it was reachable."]);
+                }
+                if (flag == "UnreachableIPv4") {
+                    output.push([flag,"unreachableipv4", "This relay claims to accept OR connections using IPv4 but the directory authorities failed to confirm it was reachable."]);
                 }
                 if (flag == "IPv6 Exit") {
                     output.push([flag, "ipv6exit", "This relay allows exit connections using IPv6."]);
@@ -195,7 +201,10 @@ define([
                         relay.or_addresses = new_addresses;
                     }
                     relay.or_address = relay.or_addresses ? relay.or_addresses[0].split(":")[0] : null;
+                    relay.unreachable_or_addresses = relay.unreachable_or_addresses ? relay.unreachable_or_addresses : [];
                     relay.or_v6_addresses = $.grep(relay.or_addresses, function(n, i) { return n.indexOf("[") == 0; });
+                    relay.unreachable_or_v4_addresses = $.grep(relay.unreachable_or_addresses, function(n, i) { return n.indexOf(".") != -1; });
+                    relay.unreachable_or_v6_addresses = $.grep(relay.unreachable_or_addresses, function(n, i) { return n.indexOf("[") == 0; });
                     relay.or_port = relay.or_addresses ? relay.or_addresses[0].split(":")[1] : 0;
                     relay.dir_port = relay.dir_address ? relay.dir_address.split(":")[1] : 0;
                     relay.exit_addresses = relay.exit_addresses ? relay.exit_addresses : null;
@@ -225,6 +234,8 @@ define([
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
                     if (relay.or_v6_addresses.length > 0) additional_flags.push("ReachableIPv6");
+                    if (relay.unreachable_or_v4_addresses.length > 0) additional_flags.push("UnreachableIPv4");
+                    if (relay.unreachable_or_v6_addresses.length > 0) additional_flags.push("UnreachableIPv6");
                     if (relay.exit_policy_v6_summary !== null) additional_flags.push("IPv6 Exit");
 
                     relay.additional_flags = model.parseadditionalflags(additional_flags);

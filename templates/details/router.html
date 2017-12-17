@@ -21,7 +21,17 @@
       <dd><%= _.escape(relay.get('nickname')) %></dd>
 
       <dt><span class="tip" title="Addresses and ports where the relay listens for incoming connections from clients and other relays.">OR Addresses</span> <a href="#search/<%= relay.get('or_addresses')[0].split(":")[0] %>"><i class="fa fa-search"></i></a></dt>
-      <dd><%= relay.get('or_addresses') %></dd>
+      <dd>
+        <pre class="pre-scrollable"><% _.each(relay.get('or_addresses'),
+          function(or_address) { %><%= $.trim(or_address) %><br><% }); %></pre>
+      </dd>
+      <% if (relay.get('unreachable_or_addresses').length > 0) { %>
+      <dt><span class="tip" title="Addresses and ports where the relay claims to listen for incoming connections from clients and other relays but that the directory authorities failed to confirm as reachable.">Unreachable OR Addresses</span></dt>
+      <dd>
+        <pre class="pre-scrollable"><% _.each(relay.get('unreachable_or_addresses'),
+          function(or_address) { %><%= $.trim(or_address) %><br><% }); %></pre>
+      </dd>
+      <% } %>
 
       <dt><span class="tip" title="These are the contact details of the Tor relay operator">Contact</span></dt>
       <dd><%= _.escape( relay.get('contact')!='undefined' ? relay.get('contact') : 'none' ) %></dd>
