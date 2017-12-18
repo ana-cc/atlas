@@ -76,6 +76,9 @@ define([
                 if (flag == "IPv6 Exit") {
                     output.push([flag, "ipv6exit", "This relay allows exit connections using IPv6."]);
                 }
+                if (flag == "Hibernating") {
+                    output.push([flag, "hibernating", "This relay indicated that it is hibernating in its last known server descriptor."]);
+                }
             });
             return output;
         },
@@ -232,6 +235,7 @@ define([
                     var additional_flags = []
                     if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true)) additional_flags.push("Not Recommended");
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
+                    if (((typeof relay.hibernating !== 'undefined') ? relay.hibernating : false)) additional_flags.push("Hibernating");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
                     if (relay.or_v6_addresses.length > 0) additional_flags.push("ReachableIPv6");
                     if (relay.unreachable_or_v4_addresses.length > 0) additional_flags.push("UnreachableIPv4");
