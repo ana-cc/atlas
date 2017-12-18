@@ -49,18 +49,40 @@ define([
 
       var g = svg.append("g");
 
-      var maximum_value = 0;
-      _.each(aggregates, function(aggregate) {
-        if (aggregate[aggregate_property] > maximum_value) maximum_value = aggregate[aggregate_property];
-      });
+      var maximum_value = Number.NEGATIVE_INFINITY;
+      var minimum_value = Number.POSITIVE_INFINITY;
 
-      var getCountryAggregate = function(code, aggregate_property) {
-        var found = 0;
+      if (aggregate_property == "cw_bw") {
         _.each(aggregates, function(aggregate) {
-          if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
+          if (aggregate["advertised_bandwidth"] == 0) current_val = 0;
+            else current_val = (aggregate["consensus_weight"]/(aggregate["advertised_bandwidth"]/1024));
+          if (current_val > maximum_value) maximum_value = current_val;
+          if (current_val < minimum_value) minimum_value = current_val;
+       });
+       var getCountryAggregate = function(code, aggregate_property) {
+         var found = 0;
+         _.each(aggregates, function(aggregate) {
+           if (aggregate.country.toUpperCase() == code)
+           if (aggregate["advertised_bandwidth"] == 0) found = 0;
+           else found=aggregate["consensus_weight"]/(aggregate["advertised_bandwidth"]/1024);
+         });
+         if (found < 1 && found > 0) {
+           return 1/(Math.sqrt(found/minimum_value));
+         } else {
+           return 0-Math.sqrt(found/maximum_value);
+         }
+       }
+     } else {
+        _.each(aggregates, function(aggregate) {
+          if (aggregate[aggregate_property] > maximum_value) maximum_value = aggregate[aggregate_property];
         });
-
+        var getCountryAggregate = function(code, aggregate_property) {
+          var found = 0;
+          _.each(aggregates, function(aggregate) {
+            if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
+          });
         return (found == 0) ? found : Math.sqrt(found/maximum_value);
+        }
       }
 
       d3.json("json/countries.topo.json", function(error, us) {
@@ -78,7 +100,7 @@ define([
 
       g.append("g")
         .attr("id", "countries")
-        .style("fill","#7d4698")
+        .style("fill", "#7d4698")
         .style("stroke", "#484848")
         .style("stroke-linejoin", "round")
         .style("stroke-linecap", "round")
@@ -87,11 +109,14 @@ define([
         .enter()
           .append("path")
             .attr("id", function(d) { return d.id; })
-            .style("fill-opacity", function(d) { return getCountryAggregate(d.id, aggregate_property); })
+            .style("fill", function(d) { return (getCountryAggregate(d.id, aggregate_property) > 0) ? "#7d4698" : "#68b030"; })
+            .style("fill-opacity", function(d) { return Math.abs(getCountryAggregate(d.id, aggregate_property)); })
             .attr("d", path)
           .append("svg:title")
             .text( function(d) { return d.id; });
 
+
+    function append_legend() {
       for (var i = 0; i <= 1; i += 0.2) {
         svg.append("rect")
           .attr("x", 10)
@@ -114,8 +139,48 @@ define([
           .attr("y", height-(i*5+0.5)*20 )
           .style("font-size", "12px")
           .style("fill", "#484848")
-          .text("" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%");
-      }
+          .text( function() {
+            return (aggregate_property == "advertised_bandwidth") ?
+             "" + (Math.pow(i,2)* maximum_value/(1024*1024)).toFixed(2) + "MiB/s" :
+             "" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%";
+          });
+       }
+    }
+  if (aggregate_property == "cw_bw") {
+      legend = (maximum_value >1) ? 0 : 1;
+      for (var i = legend; i <= 2 ; i += 0.2) {
+        j = Math.abs(i-1);
+        svg.append("rect")
+          .attr("x", 10)
+          .attr("y", height-((i-legend)*5+1)*20)
+          .attr("height", "10")
+          .attr("width", "15")
+          .style("fill", "#fff");
+
+        svg.append("rect")
+          .attr("x", 10)
+          .attr("y", height-((i-legend)*5+1)*20)
+          .attr("height", "10")
+          .attr("width", "15")
+          .style("fill", function() { return (i>1) ? "#7d4698" : "#68b030"; })
+          .style("fill-opacity", function() { return j; })
+          .style("stroke", "#484848");
+
+        svg.append("text")
+          .attr("x", 30)
+          .attr("y", height-((i-legend)*5+0.5)*20)
+          .style("font-size", "12px")
+          .style("fill", "#484848")
+          .text(function(){
+           if (j==0) return "1:1";
+           return (i<1) ? "" + (Math.pow(j,2)*maximum_value).toFixed(1) + ":1" :
+                          "1:" + (Math.pow(j,2)*(1/minimum_value)).toFixed(1);
+
+         });
+       }
+     } else {
+       append_legend();
+     }
 
       $("#aggregate-map").html("");
       document.getElementById("aggregate-map").appendChild(svg.node());
