@@ -40,7 +40,7 @@ define([
                     output.push([flag, "stable", "This relay is suitable for long-lived circuits."]);
                 }
                 if (flag == "V2Dir") {
-                    output.push([flag, "v2dir-alt", "This relay implements the v2 directory protocol or higher."]);
+                    output.push([flag, "v2dir", "This relay implements the v2 directory protocol or higher."]);
                 }
                 if (flag == "Valid") {
                     output.push([flag, "valid", "This relay has been 'validated'."]);
