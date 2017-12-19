@@ -17,6 +17,14 @@ define([
 ], function($, _, Backbone, topojson, d3array, d3geo, d3geoproj, aggregatesCollection, aggregateMapTemplate){
   var aggregateSearchView = Backbone.View.extend({
     el: "#content",
+    explanations: {
+        "consensus_weight_fraction": "This map shows the total <a href=\"https://metrics.torproject.org/glossary.html#consensus-weight\" target=\"_blank\">consensus weight</a> of each country's relays as a percentage of all consensus weights in the network.  This percentage is a very rough approximation of the probability of a relay in each country to be selected by clients.",
+        "guard_probability": "This map shows the total guard probability of each country's relays as a percentage of the guard probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
+        "middle_probability": "This map shows the total middle probability of each country's relays as a percentage of the middle probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
+        "exit_probability": "This map shows the total exit probability of each country's relays as a percentage of the exit probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
+        "advertised_bandwidth": "This map shows the total <a href=\"https://metrics.torproject.org/glossary.html#advertised-bandwidth\" target=\"_blank\">advertised bandwidth</a> of each country's relays.",
+        "cw_bw": "This map shows the ratio of total consensus weight versus total advertised bandwidth for each country. Countries shown in purple have greater advertised bandwidth than consensus weight, indicating that they are underweighted. Countries shown in green have greater consensus weight than advertised bandwidth and so are over weighted."
+    },
     initialize: function() {
       this.collection = new aggregatesCollection;
     },
@@ -25,6 +33,7 @@ define([
 
       var aggregate_property = $('input[name="aggregate-property"]:checked').val();
       var aggregates = this.collection.models;
+      var explanations = this.explanations;
 
       var m_width = $("#container").width();
       var width = 938;
@@ -186,6 +195,7 @@ define([
       document.getElementById("aggregate-map").appendChild(svg.node());
 
       $('input[name="aggregate-property"]').prop('disabled', false);
+      $('#map-explain').html(explanations[aggregate_property]);
      });
     },
     save: function() {
