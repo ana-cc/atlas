@@ -156,19 +156,24 @@ define([
        }
     }
   if (aggregate_property == "cw_bw") {
-      legend = (maximum_value >1) ? 0 : 1;
+      legend = (maximum_value > 1) ? 0 : 1;
+      current_box = 0;
       for (var i = legend; i <= 2 ; i += 0.2) {
         j = Math.abs(i-1);
+        current_value = (i<1) ? (Math.pow(j,2)*maximum_value) :
+                                (Math.pow(j,2)*(1/minimum_value));
+        if (current_value < 1)
+          continue;
         svg.append("rect")
           .attr("x", 10)
-          .attr("y", height-((i-legend)*5+1)*20)
+          .attr("y", height-(current_box*5+1)*20)
           .attr("height", "10")
           .attr("width", "15")
           .style("fill", "#fff");
 
         svg.append("rect")
           .attr("x", 10)
-          .attr("y", height-((i-legend)*5+1)*20)
+          .attr("y", height-(current_box*5+1)*20)
           .attr("height", "10")
           .attr("width", "15")
           .style("fill", function() { return (i>1) ? "#7d4698" : "#68b030"; })
@@ -177,15 +182,16 @@ define([
 
         svg.append("text")
           .attr("x", 30)
-          .attr("y", height-((i-legend)*5+0.5)*20)
+          .attr("y", height-(current_box*5+0.5)*20)
           .style("font-size", "12px")
           .style("fill", "#484848")
           .text(function(){
            if (j==0) return "1:1";
-           return (i<1) ? "" + (Math.pow(j,2)*maximum_value).toFixed(1) + ":1" :
-                          "1:" + (Math.pow(j,2)*(1/minimum_value)).toFixed(1);
+           return (i<1) ? "" + current_value.toFixed(1) + ":1" :
+                          "1:" + current_value.toFixed(1);
 
          });
+         current_box += 0.2;
        }
      } else {
        append_legend();
