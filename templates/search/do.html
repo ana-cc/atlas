@@ -59,7 +59,8 @@
 			<th>Bandwidth</th>
 			<th>Uptime</th>
 			<th>Country</th>
-			<th>IP</th>
+			<th>IPv4</th>
+			<th>IPv6</th>
 			<th>Flags</th>
 			<th style="white-space: nowrap;">Add. Flags</th>
 			<th>ORPort</th>
@@ -100,6 +101,7 @@
               <td data-order="Unknown"><img class="tip inline country" title="Unknown" alt="Unknown" src="img/cc/xz.png"></td>
             <% } %>
 			<td><%= relay.get('or_address') %></td>
+			<td><%= (relay.get('or_v6_address')) ? relay.get('or_v6_address') : '-' %></td>
 			<td class="flags-cell">
             <% _.each(relay.get('flags'), function(flag) { %><img class="tip flags" src="img/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
             </td>

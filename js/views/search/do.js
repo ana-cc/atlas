@@ -37,6 +37,7 @@ define([
                       null,   //Uptime
                       null,   //Country
                       { "sType":  "ip-address" },  //IP Address
+                      { "sType":  "ip-address" },   //IPv6 Address
                       null,   //Flags
                       null,   //Additional Flags
                       null,   //ORPort

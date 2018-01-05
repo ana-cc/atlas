@@ -206,6 +206,7 @@ define([
                     relay.or_address = relay.or_addresses ? relay.or_addresses[0].split(":")[0] : null;
                     relay.unreachable_or_addresses = relay.unreachable_or_addresses ? relay.unreachable_or_addresses : [];
                     relay.or_v6_addresses = $.grep(relay.or_addresses, function(n, i) { return n.indexOf("[") == 0; });
+                    relay.or_v6_address = (relay.or_v6_addresses.length > 0) ? relay.or_v6_addresses[0].split("]")[0].replace(/\[/, "") : null;
                     relay.unreachable_or_v4_addresses = $.grep(relay.unreachable_or_addresses, function(n, i) { return n.indexOf(".") != -1; });
                     relay.unreachable_or_v6_addresses = $.grep(relay.unreachable_or_addresses, function(n, i) { return n.indexOf("[") == 0; });
                     relay.or_port = relay.or_addresses ? relay.or_addresses[0].split(":")[1] : 0;
