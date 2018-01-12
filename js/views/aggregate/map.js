@@ -140,6 +140,7 @@ define([
             .style("fill", function(d) { return (getCountryFillOpacity(d.id, aggregate_property) > 0) ? "#7d4698" : "#68b030"; })
             .style("fill-opacity", function(d) { return Math.abs(getCountryFillOpacity(d.id, aggregate_property)); })
             .attr("d", path)
+            .on("click", function(d) { window.location = "#aggregate/cc/country:" + d.id.toLowerCase(); })
           .append("svg:title")
             .text( function(d) { return getCountryTooltip(d.id, aggregate_property); });
 
