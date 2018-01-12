@@ -21,7 +21,7 @@ define([
         'toprelays': 'showTopRelays',
         'aggregate/:aType(/:query)': 'aggregateSearch',
         'aggregate(/:aType)/': 'emptyAggregateSearch',
-        'map(/:query)': 'aggregateMap',
+        'map(_:property)(/:query)': 'aggregateMap',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -116,7 +116,7 @@ define([
       });
     },
     // Perform an aggregate search
-    aggregateMap: function(query){
+    aggregateMap: function(property, query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Map view" + ((query) ? " for " + query : "") + "</li>");
 
         $("#content").hide();
@@ -124,6 +124,7 @@ define([
         $(".progress").show();
 
         aggregateMapView.collection.aType = "cc";
+        aggregateMapView.mapProperty = (property) ? property : "consensus_weight_fraction";
 
         if (query) {
           query = query.trim();

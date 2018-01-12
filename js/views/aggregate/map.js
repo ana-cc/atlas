@@ -30,7 +30,6 @@ define([
     },
     plot: function() {
       $('input[name="aggregate-property"]').prop('disabled', true);
-
       var aggregate_property = $('input[name="aggregate-property"]:checked').val();
       var aggregates = this.collection.models;
       var explanations = this.explanations;
@@ -236,6 +235,7 @@ define([
       document.title = "Relay Search";
       var compiledTemplate = _.template(aggregateMapTemplate)
       this.$el.html(compiledTemplate({query: query,
+                                     mapProperty: this.mapProperty,
                                      aggregates: this.collection.models,
                                      countries: CountryCodes,
                                      error: this.error,
@@ -251,6 +251,10 @@ define([
         });
         $('#save_svg').bind('click', function(){
           thisView.save();
+        });
+        $('#permalink').bind('click', function(){
+          aggregate_property = $('input[name="aggregate-property"]:checked').val();
+          window.location.hash = "#map_" + aggregate_property + ((query) ? "/" + query : "");
         });
       } else {
         $('#no-svg').show();
