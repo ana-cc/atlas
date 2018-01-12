@@ -7,7 +7,7 @@ define([
 ], function($, _, Backbone, aggregateModel){
   var aggregatesCollection = Backbone.Collection.extend({
     model: aggregateModel,
-    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as_number,as_name',
+    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as_number,as_name,measured',
     url: '',
     aType: 'cc',
     lookup: function(options) {
@@ -70,14 +70,19 @@ define([
           if (!asAggregate) {
             if (relay.as_number !== 0) aggregates[aggregateKey].as.add(relay.as_number);
           }
-
           aggregates[aggregateKey].relays++;
           if ((typeof relay.guard_probability) !== "undefined") aggregates[aggregateKey].guard_probability += relay.guard_probability;
           if ((typeof relay.middle_probability) !== "undefined") aggregates[aggregateKey].middle_probability += relay.middle_probability;
           if ((typeof relay.exit_probability) !== "undefined") aggregates[aggregateKey].exit_probability += relay.exit_probability;
           if ((typeof relay.consensus_weight) !== "undefined") aggregates[aggregateKey].consensus_weight += relay.consensus_weight;
           if ((typeof relay.consensus_weight_fraction) !== "undefined") aggregates[aggregateKey].consensus_weight_fraction += relay.consensus_weight_fraction;
-          if ((typeof relay.advertised_bandwidth) !== "undefined") aggregates[aggregateKey].advertised_bandwidth += relay.advertised_bandwidth;
+          if ((typeof relay.advertised_bandwidth) !== "undefined" && relay.advertised_bandwidth > 0) {
+            aggregates[aggregateKey].advertised_bandwidth += relay.advertised_bandwidth;
+            if (relay.measured) {
+              aggregates[aggregateKey].consensus_weight_to_bandwidth_count++;
+              aggregates[aggregateKey].consensus_weight_to_bandwidth += ((relay.consensus_weight*1024)/relay.advertised_bandwidth); // This is divided by number of relays for which data existed below to provide a mean average
+            }
+          }
           _.each(relay.flags, function(flag) {
             if (flag == "Guard") aggregates[aggregateKey].guards++;
             if (flag == "Exit") aggregates[aggregateKey].exits++;
@@ -103,6 +108,9 @@ define([
                 aggregate.country = value1;
               });
             }
+          }
+          if (aggregate.consensus_weight_to_bandwidth_count > 0) {
+            aggregate.consensus_weight_to_bandwidth = aggregate.consensus_weight_to_bandwidth/aggregate.consensus_weight_to_bandwidth_count;
           }
           aggregatesArr.push(aggregate);
         });

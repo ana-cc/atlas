@@ -23,7 +23,7 @@ define([
         "middle_probability": "This map shows the total middle probability of each country's relays as a percentage of the middle probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
         "exit_probability": "This map shows the total exit probability of each country's relays as a percentage of the exit probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
         "advertised_bandwidth": "This map shows the total <a href=\"https://metrics.torproject.org/glossary.html#advertised-bandwidth\" target=\"_blank\">advertised bandwidth</a> of each country's relays.",
-        "cw_bw": "This map shows the ratio of total consensus weight versus total advertised bandwidth for each country. Countries shown in purple have greater advertised bandwidth than consensus weight, indicating that they are underweighted. Countries shown in green have greater consensus weight than advertised bandwidth and so are over weighted."
+        "consensus_weight_to_bandwidth": "This map shows the average ratio of consensus weight to advertised bandwidth for relays in each country. Countries shown in purple have greater consensus weight than advertised bandwidth, indicating that they are overweighted. Countries shown in green have greater advertised bandwidth than consensus weight and so are underweighted. Relays that did not have an advertised bandwidth or advertise a bandwidth of zero are not included in this analysis. Relays that have not yet been measured by at least three bandwidth authorities are also not included in this map as their consensus weight is not based on bandwidth measurement yet."
     },
     initialize: function() {
       this.collection = new aggregatesCollection;
@@ -62,37 +62,55 @@ define([
       var maximum_value = Number.NEGATIVE_INFINITY;
       var minimum_value = Number.POSITIVE_INFINITY;
 
-      if (aggregate_property == "cw_bw") {
+      _.each(aggregates, function(aggregate) {
+        current_val = aggregate[aggregate_property];
+        if (current_val > maximum_value) maximum_value = current_val;
+        if (current_val !== 0 && current_val < minimum_value) minimum_value = current_val;
+      });
+
+      var getCountryAggregate = function(code, aggregate_property) {
+        var found = 0;
         _.each(aggregates, function(aggregate) {
-          if (aggregate["advertised_bandwidth"] == 0) current_val = 0;
-            else current_val = (aggregate["consensus_weight"]/(aggregate["advertised_bandwidth"]/1024));
-          if (current_val > maximum_value) maximum_value = current_val;
-          if (current_val < minimum_value) minimum_value = current_val;
-       });
-       var getCountryAggregate = function(code, aggregate_property) {
-         var found = 0;
-         _.each(aggregates, function(aggregate) {
-           if (aggregate.country.toUpperCase() == code)
-           if (aggregate["advertised_bandwidth"] == 0) found = 0;
-           else found=aggregate["consensus_weight"]/(aggregate["advertised_bandwidth"]/1024);
-         });
-         if (found < 1 && found > 0) {
-           return 1/(Math.sqrt(found/minimum_value));
-         } else {
-           return 0-Math.sqrt(found/maximum_value);
-         }
-       }
-     } else {
-        _.each(aggregates, function(aggregate) {
-          if (aggregate[aggregate_property] > maximum_value) maximum_value = aggregate[aggregate_property];
+          if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
         });
-        var getCountryAggregate = function(code, aggregate_property) {
-          var found = 0;
-          _.each(aggregates, function(aggregate) {
-            if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
-          });
-        return (found == 0) ? found : Math.sqrt(found/maximum_value);
+        return found;
+      }
+
+      var getCountryFillOpacity = function(code, aggregate_property) {
+        found = getCountryAggregate(code, aggregate_property);
+        if (aggregate_property == "consensus_weight_to_bandwidth") {
+          if (found == 0) {
+            return 0;
+          } else {
+            return (found < 1) ? -(1/found)/(1/minimum_value) : found/maximum_value;
+          }
+        } else {
+          return found/maximum_value;
         }
+      }
+
+      var getCountryTooltip = function(code, aggregate_property) {
+        found = getCountryAggregate(code, aggregate_property);
+        text = CountryCodes[code.toLowerCase()] + " (" + code + ") - ";
+        switch (aggregate_property) {
+          case "consensus_weight_fraction":
+          case "guard_probability":
+          case "middle_probability":
+          case "exit_probability":
+              text += (found*100).toFixed(3) + "%";
+              break;
+          case "advertised_bandwidth":
+              text += found + "KBps";
+              break;
+          case "consensus_weight_to_bandwidth":
+              if (found == 0) {
+                text += "No relays";
+              } else {
+                text += (found<1) ? "1:" + (1/found).toFixed(1) :
+                                    found.toFixed(1) + ":1";
+              }
+        }
+        return text;
       }
 
       d3.json("json/countries.topo.json", function(error, us) {
@@ -119,11 +137,11 @@ define([
         .enter()
           .append("path")
             .attr("id", function(d) { return d.id; })
-            .style("fill", function(d) { return (getCountryAggregate(d.id, aggregate_property) > 0) ? "#7d4698" : "#68b030"; })
-            .style("fill-opacity", function(d) { return Math.abs(getCountryAggregate(d.id, aggregate_property)); })
+            .style("fill", function(d) { return (getCountryFillOpacity(d.id, aggregate_property) > 0) ? "#7d4698" : "#68b030"; })
+            .style("fill-opacity", function(d) { return Math.abs(getCountryFillOpacity(d.id, aggregate_property)); })
             .attr("d", path)
           .append("svg:title")
-            .text( function(d) { return d.id; });
+            .text( function(d) { return getCountryTooltip(d.id, aggregate_property); });
 
 
     function append_legend() {
@@ -151,18 +169,19 @@ define([
           .style("fill", "#484848")
           .text( function() {
             return (aggregate_property == "advertised_bandwidth") ?
-             "" + (Math.pow(i,2)* maximum_value/(1024*1024)).toFixed(2) + "MiB/s" :
-             "" + (Math.pow(i,2)* maximum_value*100).toFixed(3) + "%";
+             "" + (i * maximum_value/(1024*1024)).toFixed(2) + "MiB/s" :
+             "" + (i * maximum_value*100).toFixed(3) + "%";
           });
        }
     }
-  if (aggregate_property == "cw_bw") {
+
+  if (aggregate_property == "consensus_weight_to_bandwidth") {
       legend = (maximum_value > 1) ? 0 : 1;
       current_box = 0;
       for (var i = legend; i <= 2 ; i += 0.2) {
         j = Math.abs(i-1);
-        current_value = (i<1) ? (Math.pow(j,2)*maximum_value) :
-                                (Math.pow(j,2)*(1/minimum_value));
+        current_value = (i<1) ? (j*maximum_value) :
+                                (j*(1/minimum_value));
         if (current_value < 1)
           continue;
         svg.append("rect")
@@ -177,7 +196,7 @@ define([
           .attr("y", height-(current_box*5+1)*20)
           .attr("height", "10")
           .attr("width", "15")
-          .style("fill", function() { return (i>1) ? "#7d4698" : "#68b030"; })
+          .style("fill", function() { return (i<1) ? "#7d4698" : "#68b030"; })
           .style("fill-opacity", function() { return j; })
           .style("stroke", "#484848");
 

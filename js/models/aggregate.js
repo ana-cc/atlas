@@ -15,6 +15,8 @@ define([
           advertised_bandwidth: 0,
           consensus_weight: 0,
           consensus_weight_fraction: 0,
+          consensus_weight_to_bandwidth: 0,
+          consensus_weight_to_bandwidth_count: 0,
           relays: 0,
           guards: 0,
           exits: 0
