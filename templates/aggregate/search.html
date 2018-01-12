@@ -40,6 +40,7 @@
 <table class="table table-hover table-striped" id="torstatus_results">
 	<thead>
 		<tr>
+                        <% if (aType == "version") { %><th>Version</th><% } %>
 			<th>Country</sup></th>
                         <th>Autonomous System</th>
 			<th>Consensus Weight</th>
@@ -56,25 +57,30 @@
 
 <% _.each(aggregates, function(aggregate) { %>
   <tr>
+    <% if (aType == "version") { %>
+    <td>
+      <%= aggregate.version %>
+    </td>
+    <% } %>
     <td>
       <% if ((typeof aggregate.country) == "string") { %>
-        <a href="#search/<%= (query) ? query + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %><% } %>"><img class="inline country" src="img/cc/<%= aggregate.country %>.png"> <%= countries[aggregate.country] %></a>
+        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %><% } %>"><img class="inline country" src="img/cc/<%= aggregate.country %>.png"> <%= countries[aggregate.country] %></a>
       <% } else { %>
         <% if ((typeof aggregate.as) == "string") { %>
-          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as %><% } %>"><%= aggregate.country.size %> distinct</a>)
+          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as %><% } %>"><%= aggregate.country.size %> distinct</a>)
         <% } else { %>
-          (<a href="#aggregate/cc<%= (query) ? "/" + query : "" %>"><%= aggregate.country.size %> distinct</a>)
+          (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
         <% } %>
       <% } %>
     </td>
     <td>
       <% if ((typeof aggregate.as) == "string") { %>
-        <a href="#search/<%= (query) ? query + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as  %><% } %>"><%= aggregate.as_name %> (<%= aggregate.as %>)</a>
+        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as  %><% } %>"><%= aggregate.as_name %> (<%= aggregate.as %>)</a>
       <% } else { %>
         <% if ((typeof aggregate.country) == "string") { %>
-          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country %><% } %>"><%= aggregate.as.size %> distinct</a>)
+          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country %><% } %>"><%= aggregate.as.size %> distinct</a>)
         <% } else { %>
-          (<a href="#aggregate/as<%= (query) ? "/" + query : "" %>"><%= aggregate.as.size %> distinct</a>)
+          (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
         <% } %>
       <% } %>
     </td>
@@ -85,21 +91,21 @@
     <td data-order="<%= aggregate.exit_probability %>"><%= (aggregate.exit_probability * 100).toFixed(4) %>%</td>
     <td>
       <% if ((typeof aggregate.as) == "string" || (typeof aggregate.country) == "string") { %>
-        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %>"><%= aggregate.relays %></a>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.relays %></a>
       <% } else { %>
         <%= aggregate.relays %>
       <% } %>
     </td>
     <td>
       <% if (aggregate.guards > 0) { %>
-        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:guard<% } %>"><%= aggregate.guards %></a></td>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:guard <% } %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.guards %></a></td>
       <% } else { %>
         0
       <% } %>
     </td>
     <td>
       <% if (aggregate.exits > 0) { %>
-        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:exit<% } %>"><%= aggregate.exits %></a></td>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:exit <% } %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.exits %></a></td>
       <% } else { %>
         0
       <% } %>

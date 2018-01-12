@@ -7,7 +7,7 @@ define([
 ], function($, _, Backbone, aggregateModel){
   var aggregatesCollection = Backbone.Collection.extend({
     model: aggregateModel,
-    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as_number,as_name,measured',
+    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as_number,as_name,measured,version',
     url: '',
     aType: 'cc',
     lookup: function(options) {
@@ -35,6 +35,7 @@ define([
 
           var ccAggregate = false;
           var asAggregate = false;
+          var versionAggregate = false;
 
           if (collection.aType == "all") {
             aggregateKey = "zz"; // A user-assigned ISO 3166-1 code, but really just a static key
@@ -44,6 +45,9 @@ define([
           } else if (collection.aType == "as") {
             aggregateKey = relay.as_number;
             asAggregate = true;
+          } else if (collection.aType == "version") {
+            aggregateKey = relay.version.split(".").slice(0, 3).join(".") + ".";
+            versionAggregate = true;
           } else {
             aggregateKey = relay.country + "/" + relay.as_number;
             ccAggregate = asAggregate = true;
@@ -60,6 +64,9 @@ define([
               aggregates[aggregateKey].as = relay.as_number;
             } else {
               aggregates[aggregateKey].as = new Set();
+            }
+            if (versionAggregate) {
+              aggregates[aggregateKey].version = aggregateKey;
             }
             aggregates[aggregateKey].as_name = relay.as_name;
           }

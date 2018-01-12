@@ -94,6 +94,10 @@ define([
                 return goAggregate("ascc")
             });
 
+            $("#do-advanced-aggregation-version").bind('click', function(){
+                return goAggregate("version")
+            });
+
             $("#home-advanced-search").bind('submit', function(){
                 var query = buildAdvancedQuery();
                 document.location = "#search/"+encodeURI(query);

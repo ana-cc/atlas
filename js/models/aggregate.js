@@ -19,7 +19,8 @@ define([
           consensus_weight_to_bandwidth_count: 0,
           relays: 0,
           guards: 0,
-          exits: 0
+          exits: 0,
+          version: null
 	});
 	return aggregateModel;
 });
