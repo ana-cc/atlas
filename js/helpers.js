@@ -206,6 +206,7 @@ var CountryCodes = {
   "sn" : "Senegal",
   "so" : "Somalia",
   "sr" : "Suriname",
+  "ss" : "South Sudan",
   "st" : "S&#227;o Tom&#233; and Pr&#237;ncipe",
   "sv" : "El Salvador",
   "sy" : "Syrian Arab Republic",
