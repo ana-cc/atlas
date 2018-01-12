@@ -39,7 +39,8 @@ define([
       var width = 938;
       var height = 500;
 
-      var projection = d3geoproj.geoCylindricalEqualArea();
+      var projection = d3geoproj.geoCylindricalEqualArea()
+                       .scale(175);
 
       var path = d3.geo.path()
         .projection(projection);
