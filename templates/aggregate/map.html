@@ -51,6 +51,7 @@
    <div class="panel panel-default">
    <div class="panel-body">
    <form id="map-radio-buttons">
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="relays"<% if (mapProperty == "relays") { %> checked="checked"<% } %>> Number of Relays</label>
      <label class="radio-inline"><input type="radio" name="aggregate-property" value="consensus_weight_fraction"<% if (mapProperty == "consensus_weight_fraction") { %> checked="checked"<% } %>> Consensus Weight</label>
      <label class="radio-inline"><input type="radio" name="aggregate-property" value="guard_probability"<% if (mapProperty == "guard_probability") { %> checked="checked"<% } %>> Guard Probability</label>
      <label class="radio-inline"><input type="radio" name="aggregate-property" value="middle_probability"<% if (mapProperty == "middle_probability") { %> checked="checked"<% } %>> Middle Probability</label>

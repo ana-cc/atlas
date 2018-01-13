@@ -18,6 +18,7 @@ define([
   var aggregateSearchView = Backbone.View.extend({
     el: "#content",
     explanations: {
+        "relays": "The map shows the total number of relays running in each country.",
         "consensus_weight_fraction": "This map shows the total <a href=\"https://metrics.torproject.org/glossary.html#consensus-weight\" target=\"_blank\">consensus weight</a> of each country's relays as a percentage of all consensus weights in the network.  This percentage is a very rough approximation of the probability of a relay in each country to be selected by clients.",
         "guard_probability": "This map shows the total guard probability of each country's relays as a percentage of the guard probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
         "middle_probability": "This map shows the total middle probability of each country's relays as a percentage of the middle probabilities of all relays in the network. This probability is calculated based on consensus weights, relay flags, and bandwidth weights in the consensus. Path selection depends on more factors, so that this probability can only be an approximation.",
@@ -88,27 +89,35 @@ define([
         }
       }
 
-      var getCountryTooltip = function(code, aggregate_property) {
-        found = getCountryAggregate(code, aggregate_property);
-        text = CountryCodes[code.toLowerCase()] + " (" + code + ") - ";
+      var formatValue = function(value, aggregate_property) {
         switch (aggregate_property) {
+          case "relays":
+            text = value.toFixed(0) + " relays";
+            break;
           case "consensus_weight_fraction":
           case "guard_probability":
           case "middle_probability":
           case "exit_probability":
-              text += (found*100).toFixed(3) + "%";
-              break;
+            text = (value*100).toFixed(3) + "%";
+            break;
           case "advertised_bandwidth":
-              text += found + "KBps";
-              break;
+            text = value + "KBps";
+            break;
           case "consensus_weight_to_bandwidth":
-              if (found == 0) {
-                text += "No relays";
-              } else {
-                text += (found<1) ? "1:" + (1/found).toFixed(1) :
-                                    found.toFixed(1) + ":1";
-              }
+            if (value == 0) {
+              text = "No relays";
+            } else {
+              text = (value<1) ? "1:" + (1/value).toFixed(1) :
+                                  value.toFixed(1) + ":1";
+            }
         }
+        return text;
+      }
+
+      var getCountryTooltip = function(code, aggregate_property) {
+        found = getCountryAggregate(code, aggregate_property);
+        text = CountryCodes[code.toLowerCase()] + " (" + code + ") - ";
+        text += formatValue(found, aggregate_property);
         return text;
       }
 
@@ -168,9 +177,7 @@ define([
           .style("font-size", "12px")
           .style("fill", "#484848")
           .text( function() {
-            return (aggregate_property == "advertised_bandwidth") ?
-             "" + (i * maximum_value/(1024*1024)).toFixed(2) + "MiB/s" :
-             "" + (i * maximum_value*100).toFixed(3) + "%";
+            return formatValue(i*maximum_value, aggregate_property);
           });
        }
     }
