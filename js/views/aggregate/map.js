@@ -101,7 +101,7 @@ define([
             text = (value*100).toFixed(3) + "%";
             break;
           case "advertised_bandwidth":
-            text = value + "KBps";
+            text = hrBandwidth(value);
             break;
           case "consensus_weight_to_bandwidth":
             if (value == 0) {
