@@ -11,6 +11,7 @@ define([
   'datatables',
   'datatablessort',
   'helpers',
+  'map_helpers',
   'bootstrap',
   'datatablesbs'
 ],function($, _, Backbone, topojson, d3array, d3geo, d3geoproj, resultsCollection, searchMapTemplate){
@@ -73,120 +74,30 @@ define([
       document.getElementById("search-map").appendChild(svg.node());
 
 });
-         var maximum_value = Number.NEGATIVE_INFINITY;
-         var minimum_value = Number.POSITIVE_INFINITY;
+       maximum_value = getMaxValue(results, search_property);
+       minimum_value = getMinValue(results, search_property);
 
        _.each(results, function(result) {
-         var coordinates = projection([result.attributes.longitude, result.attributes.latitude]);
-         var opacity = function(){ return (search_property == "advertised_bandwidth")
-                                    ? result.attributes[search_property]/(150 *1024 *1024) : result.attributes[search_property] * 500;                                   }
-         current_val = result.attributes[search_property]
-         if (current_val > maximum_value) maximum_value = current_val;
-         if (current_val < minimum_value) minimum_value = current_val;
-         svg.append("circle")
-            .attr("cx", coordinates[0])
-            .attr("cy", coordinates[1])
-            .attr("r", 3)
-            .style("fill-opacity", opacity)
-            .style("fill", "#7d4698");
+           var coordinates = projection([result.attributes.longitude, result.attributes.latitude]);
+           if (search_property == "consensus_weight_to_bandwidth") {
+               value = (result.attributes["advertised_bandwidth"] == 0) ? 0 : 
+                       result.attributes["consensus_weight"]*1024/result.attributes["advertised_bandwidth"];
+               if (value != 0 && value < minimum_value) minimum_value = value;
+               if (value > maximum_value) maximum_value = value;
+               } else {
+                 value = result.attributes[search_property];
+               }
+           var opacity = Math.abs(getFillOpacity(value, search_property, minimum_value, maximum_value));
+           var fill = getFillColor(value, search_property, minimum_value, maximum_value);
+           svg.append("circle")
+             .attr("cx", coordinates[0]+ Math.random()*1.5)
+             .attr("cy", coordinates[1]+ Math.random()*1.5)
+             .attr("r", 3)
+             .style("fill-opacity", opacity)
+             .style("fill", fill);
         });
 
-    function append_legend() {
-      for (var i = 0; i <= 1; i += 0.2) {
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(i*5+1)*20 )
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#fff");
-
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(i*5+1)*20 )
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#7d4698")
-          .style("fill-opacity", function() {return i;})
-          .style("stroke", "#484848");
-
-        svg.append("text")
-          .attr("x", 30)
-          .attr("y", height-(i*5+0.5)*20 )
-          .style("font-size", "12px")
-          .style("fill", "#484848")
-          .text( function() {
-            return formatValue(i*maximum_value, search_property);
-          });
-       }
-    }
-
-      var formatValue = function(value, search_property) {
-        switch (search_property) {
-          case "relays":
-            text = value.toFixed(0) + " relays";
-            break;
-          case "consensus_weight_fraction":
-          case "guard_probability":
-          case "middle_probability":
-          case "exit_probability":
-            text = (value == maximum_value) ? "> " + (value*100).toFixed(3) + "%" : (value*100).toFixed(3) + "%";
-            break;
-          case "advertised_bandwidth":
-            text = (value == maximum_value) ? "> " + hrBandwidth(value) : hrBandwidth(value);
-            break;
-          case "consensus_weight_to_bandwidth":
-            if (value == 0) {
-              text = "No relays";
-            } else {
-              text = (value<1) ? "1:" + (1/value).toFixed(1) :
-                                  value.toFixed(1) + ":1";
-            }
-        }
-        return text;
-      }
-
-  if (search_property == "consensus_weight_to_bandwidth") {
-      legend = (maximum_value > 1) ? 0 : 1;
-      current_box = 0;
-      for (var i = legend; i <= 2 ; i += 0.2) {
-        j = Math.abs(i-1);
-        current_value = (i<1) ? (j*maximum_value) :
-                                (j*(1/minimum_value));
-        if (current_value < 1)
-          continue;
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(current_box*5+1)*20)
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#fff");
-
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(current_box*5+1)*20)
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", function() { return (i<1) ? "#7d4698" : "#68b030"; })
-          .style("fill-opacity", function() { return j; })
-          .style("stroke", "#484848");
-
-        svg.append("text")
-          .attr("x", 30)
-          .attr("y", height-(current_box*5+0.5)*20)
-          .style("font-size", "12px")
-          .style("fill", "#484848")
-          .text(function(){
-           if (j==0) return "1:1";
-           return (i<1) ? "" + current_value.toFixed(1) + ":1" :
-                          "1:" + current_value.toFixed(1);
-
-         });
-         current_box += 0.2;
-       }
-     } else {
-       append_legend();
-     }
-
+      append_legend(svg, minimum_value, maximum_value, 4, search_property, true);
 
       $('input[name="search-property"]').prop('disabled', false);
       $('#map-explain').html(explanations[search_property]);

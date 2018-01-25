@@ -288,3 +288,21 @@ Object.defineProperty(Array.prototype, 'chunk', {
         return R;
     }
 });
+
+function getMinValue(objects, property) {
+   var minimum_value = Number.POSITIVE_INFINITY;
+   _.each(objects, function(object) {
+        current_val = object[property] || object.attributes[property];
+        if (current_val !== 0 && current_val < minimum_value) minimum_value = current_val;
+      });
+   return minimum_value;
+}
+
+function getMaxValue(objects, property) {
+   var maximum_value = Number.NEGATIVE_INFINITY;
+   _.each(objects, function(object) {
+        current_val = object[property] || object.attributes[property];
+        if (current_val > maximum_value) maximum_value = current_val;
+      });
+   return maximum_value;
+}

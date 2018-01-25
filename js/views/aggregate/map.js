@@ -12,6 +12,7 @@ define([
   'datatables',
   'datatablessort',
   'helpers',
+  'map_helpers',
   'bootstrap',
   'datatablesbs'
 ], function($, _, Backbone, topojson, d3array, d3geo, d3geoproj, aggregatesCollection, aggregateMapTemplate){
@@ -59,14 +60,8 @@ define([
 
       var g = svg.append("g");
 
-      var maximum_value = Number.NEGATIVE_INFINITY;
-      var minimum_value = Number.POSITIVE_INFINITY;
-
-      _.each(aggregates, function(aggregate) {
-        current_val = aggregate[aggregate_property];
-        if (current_val > maximum_value) maximum_value = current_val;
-        if (current_val !== 0 && current_val < minimum_value) minimum_value = current_val;
-      });
+      var maximum_value = getMaxValue(aggregates, aggregate_property);
+      var minimum_value = getMinValue(aggregates, aggregate_property);
 
       var getCountryAggregate = function(code, aggregate_property) {
         var found = 0;
@@ -74,51 +69,6 @@ define([
           if (aggregate.country.toUpperCase() == code) found = aggregate[aggregate_property];
         });
         return found;
-      }
-
-      var getCountryFillOpacity = function(code, aggregate_property) {
-        found = getCountryAggregate(code, aggregate_property);
-        if (aggregate_property == "consensus_weight_to_bandwidth") {
-          if (found == 0) {
-            return 0;
-          } else {
-            return (found < 1) ? -(1/found)/(1/minimum_value) : found/maximum_value;
-          }
-        } else {
-          return found/maximum_value;
-        }
-      }
-
-      var formatValue = function(value, aggregate_property) {
-        switch (aggregate_property) {
-          case "relays":
-            text = value.toFixed(0) + " relays";
-            break;
-          case "consensus_weight_fraction":
-          case "guard_probability":
-          case "middle_probability":
-          case "exit_probability":
-            text = (value*100).toFixed(3) + "%";
-            break;
-          case "advertised_bandwidth":
-            text = hrBandwidth(value);
-            break;
-          case "consensus_weight_to_bandwidth":
-            if (value == 0) {
-              text = "No relays";
-            } else {
-              text = (value<1) ? "1:" + (1/value).toFixed(1) :
-                                  value.toFixed(1) + ":1";
-            }
-        }
-        return text;
-      }
-
-      var getCountryTooltip = function(code, aggregate_property) {
-        found = getCountryAggregate(code, aggregate_property);
-        text = CountryCodes[code.toLowerCase()] + " (" + code + ") - ";
-        text += formatValue(found, aggregate_property);
-        return text;
       }
 
       d3.json("json/countries.topo.json", function(error, us) {
@@ -145,84 +95,17 @@ define([
         .enter()
           .append("path")
             .attr("id", function(d) { return d.id; })
-            .style("fill", function(d) { return (getCountryFillOpacity(d.id, aggregate_property) > 0) ? "#7d4698" : "#68b030"; })
-            .style("fill-opacity", function(d) { return Math.abs(getCountryFillOpacity(d.id, aggregate_property)); })
+            .style("fill", function(d) { value = getCountryAggregate(d.id, aggregate_property);
+                                        return getFillColor(value, aggregate_property, minimum_value, maximum_value); })
+            .style("fill-opacity", function(d) { value = getCountryAggregate(d.id, aggregate_property);
+                                                 return Math.abs(getFillOpacity(value, aggregate_property, minimum_value, maximum_value)); })
             .attr("d", path)
             .on("click", function(d) { window.location = "#aggregate/cc/country:" + d.id.toLowerCase(); })
           .append("svg:title")
-            .text( function(d) { return getCountryTooltip(d.id, aggregate_property); });
+            .text( function(d) { value = getCountryAggregate(d.id, aggregate_property);
+                                 return getCountryTooltip(d.id, value, aggregate_property); });
 
-
-    function append_legend() {
-      for (var i = 0; i <= 1; i += 0.2) {
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(i*5+1)*20 )
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#fff");
-
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(i*5+1)*20 )
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#7d4698")
-          .style("fill-opacity", function() {return i;})
-          .style("stroke", "#484848");
-
-        svg.append("text")
-          .attr("x", 30)
-          .attr("y", height-(i*5+0.5)*20 )
-          .style("font-size", "12px")
-          .style("fill", "#484848")
-          .text( function() {
-            return formatValue(i*maximum_value, aggregate_property);
-          });
-       }
-    }
-
-  if (aggregate_property == "consensus_weight_to_bandwidth") {
-      legend = (maximum_value > 1) ? 0 : 1;
-      current_box = 0;
-      for (var i = legend; i <= 2 ; i += 0.2) {
-        j = Math.abs(i-1);
-        current_value = (i<1) ? (j*maximum_value) :
-                                (j*(1/minimum_value));
-        if (current_value < 1)
-          continue;
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(current_box*5+1)*20)
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", "#fff");
-
-        svg.append("rect")
-          .attr("x", 10)
-          .attr("y", height-(current_box*5+1)*20)
-          .attr("height", "10")
-          .attr("width", "15")
-          .style("fill", function() { return (i<1) ? "#7d4698" : "#68b030"; })
-          .style("fill-opacity", function() { return j; })
-          .style("stroke", "#484848");
-
-        svg.append("text")
-          .attr("x", 30)
-          .attr("y", height-(current_box*5+0.5)*20)
-          .style("font-size", "12px")
-          .style("fill", "#484848")
-          .text(function(){
-           if (j==0) return "1:1";
-           return (i<1) ? "" + current_value.toFixed(1) + ":1" :
-                          "1:" + current_value.toFixed(1);
-
-         });
-         current_box += 0.2;
-       }
-     } else {
-       append_legend();
-     }
+      append_legend(svg, minimum_value, maximum_value, 4, aggregate_property);
 
       $("#aggregate-map").html("");
       document.getElementById("aggregate-map").appendChild(svg.node());
@@ -274,4 +157,3 @@ define([
   });
   return new aggregateSearchView;
 });
-
