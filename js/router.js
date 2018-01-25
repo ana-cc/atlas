@@ -8,8 +8,9 @@ define([
   'views/search/do',
   'views/aggregate/search',
   'views/aggregate/map',
+  'views/search/map',
   'jssha'
-], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aggregateSearchView, aggregateMapView, jsSHA){
+], function($, _, Backbone, mainDetailsView, mainSearchView, doSearchView, aggregateSearchView, aggregateMapView, relaySearchMapView, jsSHA){
   var AppRouter = Backbone.Router.extend({
     routes: {
        // Define the routes for the actions in Atlas
@@ -22,6 +23,7 @@ define([
         'aggregate/:aType(/:query)': 'aggregateSearch',
         'aggregate(/:aType)/': 'emptyAggregateSearch',
         'map(_:property)(/:query)': 'aggregateMap',
+        'msearch(_:property)(/:query)': 'searchMap',
     	// Default
     	'*actions': 'defaultAction'
     },
@@ -156,6 +158,47 @@ define([
         }
       });
     },
+
+
+    searchMap: function(property, query){
+        $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Map view " + ((query) ? " for " + query : "") + "</li>");
+
+        $("#content").hide();
+        $("#secondary-search").hide();
+        $(".progress").show();
+
+        relaySearchMapView.mapProperty = (property) ? property : "consensus_weight_fraction";
+
+        if (query) {
+          query = query.trim();
+          $("#secondary-search-query").val(query);
+          relaySearchMapView.collection.url =
+            relaySearchMapView.collection.baseurl + this.hashFingerprint(query);
+        } else {
+          relaySearchMapView.collection.url =
+            relaySearchMapView.collection.baseurl + "type:relay running:true";
+        }
+        relaySearchMapView.collection.lookup({
+          success: function(err, relaysPublished, bridgesPublished){
+          relaySearchMapView.error = err;
+          relaySearchMapView.relaysPublished = relaysPublished;
+          relaySearchMapView.bridgesPublished = bridgesPublished;
+          relaySearchMapView.render(query);
+          $("#search-title").text("Map view" + ((query) ? " for " + query : ""));
+          $(".progress").hide();
+          $("#secondary-search").show();
+          $("#content").show();
+        },
+        error: function(err){
+          relaySearchMapView.error = err;
+          relaySearchMapView.renderError();
+          $(".progress").hide();
+          $("#secondary-search").show();
+          $("#content").show();
+        }
+      });
+    },
+
     // Perform a search on Atlas
     doSearch: function(query){
         $(".breadcrumb").html("<li><a href=\"https://metrics.torproject.org/\">Home</a></li><li><a href=\"https://metrics.torproject.org/services.html\">Services</a></li><li><a href=\"#\">Relay Search</a></li><li class=\"active\">Search for " + query + "</li>");
